@@ -1,15 +1,17 @@
 <template>
-  <el-button type="primary" :icon="Plus"></el-button>
-  <el-pagination layout="prev, pager, next" :total="50">
-  </el-pagination>
-  <test></test>
+  <div>
+    <h1>123</h1>
+    <svg-icon name="home"></svg-icon>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import {Plus} from '@element-plus/icons-vue'
-  import Test from '@/components/Test.vue'
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  div {
+    h1 {
+      color: $color;
+    }
+  }
 </style>
