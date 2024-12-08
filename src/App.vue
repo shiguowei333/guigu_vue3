@@ -1,22 +1,14 @@
 <template>
   <div>
-    <h1>123</h1>
-    <svg-icon name="home"></svg-icon>
+    <router-view></router-view>
   </div>
 </template>
 
 <script setup lang="ts">
-  import request from '@/utils/requests'
+  import { reqLogin } from '@/api/user'
   import { onMounted } from 'vue'
   onMounted(() => {
-    let res = request({
-      url: '/user/login',
-      method: 'post',
-      data: {
-        username: 'admin',
-        password: '111111'
-      }
-    })
+    reqLogin({username: 'admin',password: '111111'})
   })
 </script>
 
