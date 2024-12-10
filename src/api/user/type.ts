@@ -5,7 +5,8 @@ export interface loginForm {
 }
 
 interface dataType {
-  token: string
+  token?: string
+  message?: string
 }
 
 // 登录接口返回数据类型
@@ -19,7 +20,7 @@ interface userInfo {
   avatar: string
   username: string
   password: string
-  desc: sting
+  desc: string
   roles: string[]
   buttons: string[]
   routes: string[]

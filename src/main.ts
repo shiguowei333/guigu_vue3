@@ -7,7 +7,8 @@ import 'Element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 引入路由
 import router from '@/router'
-
+// 引入pinia仓库
+import pinia from '@/store'
 
 // 获取应用实例对象
 const app = createApp(App)
@@ -21,6 +22,8 @@ import 'virtual:svg-icons-register'
 import gloalComponent from './components'
 //安装自定义插件
 app.use(gloalComponent)
+// 安装仓库pinia
+app.use(pinia)
 // 引入模板的全局的样式
 import '@/styles/index.scss'
 // 注册模板路由
