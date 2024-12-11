@@ -25,7 +25,7 @@
     import { reactive, ref } from 'vue'
     import useUserStore from '@/store/modules/user'
     import { useRouter } from 'vue-router'
-    import { ElNotification } from 'element-plus';
+    import { ElNotification } from 'element-plus'
     let loading = ref(false)
     let $router = useRouter()
     let useStore = useUserStore()
