@@ -16,7 +16,8 @@ const app = createApp(App)
 app.use(ElementPlus,{
   locale:zhCn // 配置element-plus国际化
 })
-// svg需要的配置代码
+// svg需要的配置代码这里TS找不到导入，直接忽略先
+//@ts-ignore
 import 'virtual:svg-icons-register'
 // 引入自定义插件对象：注册整个项目全局组件
 import gloalComponent from './components'
