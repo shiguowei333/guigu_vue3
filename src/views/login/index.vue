@@ -26,6 +26,7 @@
     import useUserStore from '@/store/modules/user'
     import { useRouter } from 'vue-router'
     import { ElNotification } from 'element-plus'
+    import { getTime } from '@/utils/time'
     let loading = ref(false)
     let $router = useRouter()
     let useStore = useUserStore()
@@ -39,7 +40,8 @@
         $router.push('/')
         ElNotification({
           type: 'success',
-          message: '登录成功'
+          message: '欢迎回来',
+          title: `HI,${getTime()}好`
         })
         loading.value = true
       } catch (error) {
