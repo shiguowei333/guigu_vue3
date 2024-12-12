@@ -1,13 +1,15 @@
 <template>
     <div class="layout_container">
-        <div class="layout_slider">123</div>
+        <div class="layout_slider">
+           <Logo></Logo>
+        </div>
         <div class="layout_topbar">456</div>
         <div class="layout_main">789</div>
     </div>
 </template>
 
 <script setup lang='ts'>
-
+  import Logo from './logo/index.vue'
 </script>
 
 <style scoped lang='scss'>
