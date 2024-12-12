@@ -20,7 +20,7 @@
             height: 100vh;
         }
         .layout_topbar {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: $base-menu-width;
             width: calc(100% - $base-menu-width);
