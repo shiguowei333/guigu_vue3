@@ -5,11 +5,14 @@ import { reqLogin } from '@/api/user'
 // 引入数据类型
 import type { loginForm, loginResponseData } from '@/api/user/type'
 import { GET_TOKEN, SET_TOEKN } from '@/utils/token'
+// 引入常量路由
+import { constantRoute } from '@/router/routes'
 // 创建用户小仓库
 let useUserStore = defineStore('User', {
   state: () => {
     return {
-      token: GET_TOKEN()
+      token: GET_TOKEN(),
+      menuRoutes: constantRoute
     }
   },
   actions: {
