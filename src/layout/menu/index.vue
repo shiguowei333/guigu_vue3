@@ -11,7 +11,10 @@
             </template>
           </el-menu-item>
         </template>
-        <template v-if="item.children">
+        <template v-if="item.children && item.children.length == 1">
+          <Menu :menuList="item.children"></Menu>
+        </template>
+        <template v-if="item.children && item.children.length > 1">
           <el-sub-menu v-if="!item.meta.hidden" :index="item.path">
             <template #title>
               <el-icon>
@@ -27,10 +30,12 @@
 </template>
   
 <script setup lang='ts'>
+  import { useRouter } from 'vue-router'
+  let $router = useRouter()
   defineProps(['menuList'])
   // 点击菜单的回调
   const goRoute = (vc: any) => {
-    console.log(vc)
+    $router.push(vc.index)
   }
 </script>
 
