@@ -2,17 +2,19 @@
     <div class="tabbar">
       <div class="tabbar_left">
         <el-icon style="margin-right: 10px;" @click="changeIcon">
-          <component :is="LayOutSettingStore.fold?'Fold':'Expand'"></component>
+          <component :is="layOutSettingStore.fold?'Fold':'Expand'"></component>
         </el-icon>
         <el-breadcrumb separator-icon="ArrowRight">
-          <el-breadcrumb-item :to="{ path: '/' }">权限管理</el-breadcrumb-item>
-          <el-breadcrumb-item>
-            <a href="/">promotion management</a>
+          <el-breadcrumb-item v-for="(item, index) in $route.matched" :key="index" v-show="item.meta.title">
+            <el-icon style="margin:0 3px;vertical-align: bottom;">
+              <component :is="item.meta.icon"></component>
+            </el-icon>
+            <span>{{ item.meta.title }}</span>
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div class="tabbar_right">
-        <el-button type="primary" size="small" icon="Refresh" circle></el-button>
+        <el-button type="primary" size="small" icon="Refresh" @click="updateRefsh" circle></el-button>
         <el-button type="primary" size="small" icon="FullScreen" circle></el-button>
         <el-button type="primary" size="small" icon="Setting" circle></el-button>
         <img src="../../../public/logo.png" style="width: 24px;height: 24px;margin: 0px 20px;">
@@ -35,9 +37,14 @@
   
 <script setup lang='ts' name="Tabbar">
   import useLayOutSsttingStore from '@/store/modules/setting'
-  let LayOutSettingStore = useLayOutSsttingStore()
+  import{ useRoute } from 'vue-router'
+  let layOutSettingStore = useLayOutSsttingStore()
+  let $route = useRoute()
   const changeIcon = () => {
-    LayOutSettingStore.fold = !LayOutSettingStore.fold
+    layOutSettingStore.fold = !layOutSettingStore.fold
+  }
+  const updateRefsh = () => {
+    layOutSettingStore.refsh = !layOutSettingStore.refsh
   }
 </script>
   
