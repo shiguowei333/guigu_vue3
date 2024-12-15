@@ -4,6 +4,7 @@ import path from 'path'
 import { viteMockServe } from 'vite-plugin-mock'
 // 引入svg需要用到的插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
@@ -17,7 +18,8 @@ export default defineConfig(({ command }) => {
       viteMockServe({
         mockPath: 'src/mock',
         localEnabled: command === 'serve'
-      })
+      }),
+      VueSetupExtend()
     ],
     resolve: {
       alias: {

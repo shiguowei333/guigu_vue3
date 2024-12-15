@@ -5,7 +5,7 @@
     </div>
 </template>
   
-<script setup lang='ts'>
+<script setup lang='ts' name="Logo">
   // 引入设置的标题和配置文件
   import setting from '@/setting.ts'
 </script>
@@ -17,7 +17,7 @@
     color: white;
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     img {
       width: 40px;
       height: 40px;

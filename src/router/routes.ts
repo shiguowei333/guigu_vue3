@@ -41,7 +41,7 @@ export const constantRoute = [
     meta: {
       title: '数据大屏',
       hidden: false,
-      icon: 'FullScreen'
+      icon: 'DataAnalysis'
     }
   },
   {
