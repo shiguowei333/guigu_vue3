@@ -1,7 +1,7 @@
 // 用户相关的小仓库
 import { defineStore } from 'pinia'
 // 引入接口
-import { reqLogin } from '@/api/user'
+import { reqLogin,reqUserInfo } from '@/api/user'
 // 引入数据类型
 import type { loginForm, loginResponseData } from '@/api/user/type'
 import { GET_TOKEN, SET_TOEKN } from '@/utils/token'
@@ -12,7 +12,9 @@ let useUserStore = defineStore('User', {
   state: () => {
     return {
       token: GET_TOKEN(),
-      menuRoutes: constantRoute
+      menuRoutes: constantRoute,
+      username: '',
+      avatar: ''
     }
   },
   actions: {
@@ -24,6 +26,15 @@ let useUserStore = defineStore('User', {
         return 'ok'
       }else {
         return Promise.reject(new Error(result.data.message))
+      }
+    },
+    async userInfo() {
+      let result = await reqUserInfo()
+      if(result.code === 200) {
+        this.username = result.data.checkUser.username
+        this.avatar = result.data.checkUser.avatar
+      }else {
+        
       }
     }
   },

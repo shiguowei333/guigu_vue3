@@ -1,13 +1,19 @@
 <template>
     <div>
-      <h1>我是菜单页</h1>
+      <h1>我是菜单页{{ userStore.username }}</h1>
     </div>
 </template>
   
 <script setup lang='ts'>
-  
+  import { onMounted } from 'vue'
+  import useUserStore from '@/store/modules/user'
+
+  let userStore = useUserStore()
+  onMounted(() => {
+    userStore.userInfo()
+  })
 </script>
   
-<style>
+<style scoped lang="scss">
   
 </style>

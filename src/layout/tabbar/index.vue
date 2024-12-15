@@ -17,10 +17,10 @@
         <el-button type="primary" size="small" icon="Refresh" @click="updateRefsh" circle></el-button>
         <el-button type="primary" size="small" icon="FullScreen" @click="fullScreen" circle></el-button>
         <el-button type="primary" size="small" icon="Setting" circle></el-button>
-        <img src="../../../public/logo.png" style="width: 24px;height: 24px;margin: 0px 20px;">
+        <img :src="userStore.avatar" style="width: 24px;height: 24px;margin: 0px 20px;border-radius: 50%;">
         <el-dropdown>
           <span class="el-dropdown-link">
-            admin
+            {{ userStore.username }}
             <el-icon class="el-icon--right">
               <arrow-down/>
             </el-icon>
@@ -38,6 +38,9 @@
 <script setup lang='ts' name="Tabbar">
   import useLayOutSsttingStore from '@/store/modules/setting'
   import{ useRoute } from 'vue-router'
+  import useUserStore from '@/store/modules/user'
+
+  let userStore = useUserStore()
   let layOutSettingStore = useLayOutSsttingStore()
   let $route = useRoute()
   const changeIcon = () => {
