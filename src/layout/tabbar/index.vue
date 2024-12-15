@@ -15,7 +15,7 @@
       </div>
       <div class="tabbar_right">
         <el-button type="primary" size="small" icon="Refresh" @click="updateRefsh" circle></el-button>
-        <el-button type="primary" size="small" icon="FullScreen" circle></el-button>
+        <el-button type="primary" size="small" icon="FullScreen" @click="fullScreen" circle></el-button>
         <el-button type="primary" size="small" icon="Setting" circle></el-button>
         <img src="../../../public/logo.png" style="width: 24px;height: 24px;margin: 0px 20px;">
         <el-dropdown>
@@ -45,6 +45,14 @@
   }
   const updateRefsh = () => {
     layOutSettingStore.refsh = !layOutSettingStore.refsh
+  }
+  const fullScreen = () => {
+    let full = document.fullscreenElement
+    if(!full) {
+      document.documentElement.requestFullscreen()
+    }else {
+      document.exitFullscreen()
+    }
   }
 </script>
   
