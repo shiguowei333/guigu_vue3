@@ -3,7 +3,7 @@
         <div class="layout_slider">
            <Logo></Logo>
            <el-scrollbar class="scrollbar">
-            <el-menu background-color="#001529" text-color="white">
+            <el-menu background-color="#001529" text-color="white" :default-active="$route.path">
                 <Menu :menuList="userStore.menuRoutes"></Menu>
             </el-menu>
            </el-scrollbar>
@@ -21,6 +21,9 @@
   import Main from './main/index.vue'
   // 获取用户相关的小仓库
   import useUserStore from '@/store/modules/user'
+  // 获取路由对象
+  import { useRoute } from 'vue-router'
+  let $route = useRoute()
   let userStore = useUserStore()
 </script>
 
