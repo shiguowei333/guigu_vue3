@@ -27,7 +27,7 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -37,12 +37,13 @@
   
 <script setup lang='ts' name="Tabbar">
   import useLayOutSsttingStore from '@/store/modules/setting'
-  import{ useRoute } from 'vue-router'
+  import{ useRoute,useRouter } from 'vue-router'
   import useUserStore from '@/store/modules/user'
 
   let userStore = useUserStore()
   let layOutSettingStore = useLayOutSsttingStore()
   let $route = useRoute()
+  let $router = useRouter()
   const changeIcon = () => {
     layOutSettingStore.fold = !layOutSettingStore.fold
   }
@@ -56,6 +57,10 @@
     }else {
       document.exitFullscreen()
     }
+  }
+  const logout = () => {
+    userStore.userLogout()
+    $router.push({path:'/login',query:{redirect: $route.path}})
   }
 </script>
   

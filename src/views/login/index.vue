@@ -24,11 +24,12 @@
     import { User, Lock } from '@element-plus/icons-vue'
     import { reactive, ref } from 'vue'
     import useUserStore from '@/store/modules/user'
-    import { useRouter } from 'vue-router'
+    import { useRoute, useRouter } from 'vue-router'
     import { ElNotification } from 'element-plus'
     import { getTime } from '@/utils/time'
     let loading = ref(false)
     let $router = useRouter()
+    let $route = useRoute()
     let useStore = useUserStore()
     let loginForms = ref()
     // 收集账号与密码数据
@@ -72,7 +73,8 @@
         loading.value = true
         try {
           await useStore.userLogin(loginForm)
-          $router.push('/')
+          let redirect: any = $route.query.redirect
+          $router.push({path: redirect || '/'})
           ElNotification({
             type: 'success',
             message: '欢迎回来',

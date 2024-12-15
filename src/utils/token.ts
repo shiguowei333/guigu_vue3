@@ -4,5 +4,9 @@ export const SET_TOEKN = (token: string) => {
 }
 
 export const GET_TOKEN = (): string => {
-  return localStorage.getItem('TOkEN') || ''
+  return localStorage.getItem('TOKEN') || ''
+}
+
+export const REMOVE_TOKEN = () => {
+  localStorage.removeItem('TOKEN')
 }
