@@ -29,6 +29,7 @@ app.use(pinia)
 import '@/styles/index.scss'
 // 注册模板路由
 app.use(router)
+import './permisstion.ts'
 // 将应用挂载到挂载点上
 app.mount('#app')
 
