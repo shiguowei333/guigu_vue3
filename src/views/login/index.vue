@@ -33,7 +33,7 @@
     let useStore = useUserStore()
     let loginForms = ref()
     // 收集账号与密码数据
-    let loginForm = reactive({username: 'admin',password: '123456'})
+    let loginForm = reactive({username: 'admin',password: '111111'})
     // 自定义校验姓名函数
     const validatorUserName = (rules: any,value: any,callback: any) => {
       if(value.length >= 5) {

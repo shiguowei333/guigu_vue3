@@ -1,6 +1,6 @@
 <template>
     <div class="layout_container">
-        <div class="layout_slider" :class="{fold:LayOutSettingStore.fold?true:false}">
+        <div class="layout_slider">
            <Logo></Logo>
            <el-scrollbar class="scrollbar">
             <el-menu :collapse="LayOutSettingStore.fold?true:false" background-color="#001529" text-color="white" :default-active="$route.path">
@@ -49,9 +49,6 @@
                 border-right: none;
               }
             }
-            &.fold {
-              width: $base-menu-min-width;
-            }
         }
         .layout_tabbar {
             position: absolute;
@@ -60,6 +57,7 @@
             width: calc(100% - $base-menu-width);
             height: $base-tabbar-height;
             transition: all 0.3s;
+            background-color: white;
             &.fold {
               width: calc(100% - $base-menu-min-width);
               left: $base-menu-min-width
@@ -74,6 +72,7 @@
             padding: 20px;
             overflow: auto;
             transition: all 0.3s;
+            background-color: white;
             &.fold {
               width: calc(100% - $base-menu-min-width);
               left: $base-menu-min-width
