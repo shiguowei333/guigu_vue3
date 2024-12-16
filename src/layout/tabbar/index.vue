@@ -62,8 +62,8 @@
     }
   }
   // 点击退出登录的回调函数，清空pinia用户信息，路由跳转至登录页
-  const logout = () => {
-    userStore.userLogout()
+  const logout = async () => {
+    await userStore.userLogout()
     $router.push({path:'/login',query:{redirect: $route.path}})
   }
 </script>
