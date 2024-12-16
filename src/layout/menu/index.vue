@@ -21,6 +21,7 @@
             </el-icon>
             <span>{{ item.meta.title }}</span>
           </template>
+          <!-- 组件的递归使用，递归生成菜单项 -->
           <Menu :menuList="item.children"></Menu>
       </el-sub-menu>
       </template>
@@ -30,8 +31,9 @@
 <script setup lang='ts' name="Menu">
   import { useRouter } from 'vue-router'
   let $router = useRouter()
+  // 接收父组件传递过来的菜单数据
   defineProps(['menuList'])
-  // 点击菜单的回调
+  // 点击菜单的回调，跳转至对应路由
   const goRoute = (vc: any) => {
     $router.push(vc.index)
   }

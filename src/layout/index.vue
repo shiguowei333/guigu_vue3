@@ -18,6 +18,7 @@
 </template>
 
 <script setup lang='ts' name="Layout">
+  // 引入主页四个组件
   import Logo from './logo/index.vue'
   import Menu from './menu/index.vue'
   import Main from './main/index.vue'

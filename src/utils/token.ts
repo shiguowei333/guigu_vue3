@@ -1,4 +1,4 @@
-// 封装本地存储数据与读取数据方法
+// 封装本地存储、读取、删除TOKEN的方法
 export const SET_TOEKN = (token: string) => {
   localStorage.setItem("TOKEN", token)
 }

@@ -1,4 +1,5 @@
-//用户信息数据
+// mock接口
+// 用户信息数据
 function createUserList() {
   return [
       {

@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>我是菜单页{{ userStore.username }}</h1>
+      <h1>我是首页{{ userStore.username }}</h1>
     </div>
 </template>
   

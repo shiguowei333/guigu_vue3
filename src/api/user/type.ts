@@ -4,6 +4,7 @@ export interface loginForm {
   password: string
 }
 
+// 登录接口返回的data数据类型
 interface dataType {
   token?: string
   message?: string
@@ -15,6 +16,7 @@ export interface loginResponseData {
   data: dataType
 }
 
+// 返回用户信息的数据类型
 interface userInfo {
   userId: number
   avatar: string
@@ -27,6 +29,7 @@ interface userInfo {
   token: string
 }
 
+// 返回用户信息的总数据类型
 interface user {
   checkUser: userInfo
 }

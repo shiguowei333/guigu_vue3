@@ -39,17 +39,20 @@
   import useLayOutSsttingStore from '@/store/modules/setting'
   import{ useRoute,useRouter } from 'vue-router'
   import useUserStore from '@/store/modules/user'
-
+  // 引入用户小仓库、路由、路由器
   let userStore = useUserStore()
   let layOutSettingStore = useLayOutSsttingStore()
   let $route = useRoute()
   let $router = useRouter()
+  // 修改菜单折叠、展开状态的回调函数
   const changeIcon = () => {
     layOutSettingStore.fold = !layOutSettingStore.fold
   }
+  // 刷新main区域组件重新加载的回调函数
   const updateRefsh = () => {
     layOutSettingStore.refsh = !layOutSettingStore.refsh
   }
+  // 展开全屏与关闭全屏的回调函数
   const fullScreen = () => {
     let full = document.fullscreenElement
     if(!full) {
@@ -58,6 +61,7 @@
       document.exitFullscreen()
     }
   }
+  // 点击退出登录的回调函数，清空pinia用户信息，路由跳转至登录页
   const logout = () => {
     userStore.userLogout()
     $router.push({path:'/login',query:{redirect: $route.path}})

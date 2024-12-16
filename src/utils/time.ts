@@ -1,4 +1,4 @@
-// 获取当前时间的函数
+// 获取当前时间的函数，用于登录之后的提示信息显示
 export const getTime= () => {
     let message = ''
     let hours = new Date().getHours()

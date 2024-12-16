@@ -17,9 +17,10 @@ export default defineConfig(({ command }) => {
       }),
       viteMockServe({
         mockPath: 'src/mock',
+        //@ts-ignore
         localEnabled: command === 'serve'
       }),
-      VueSetupExtend()
+      VueSetupExtend()// setup语法糖直接使用name
     ],
     resolve: {
       alias: {
@@ -30,7 +31,7 @@ export default defineConfig(({ command }) => {
         preprocessorOptions: {
           scss: {
             javascriptEnabled: true,
-            additionalData: '@import "/src/styles/variable.scss";',
+            additionalData: '@import "/src/styles/variable.scss";',// 引入全局scss样式
           },
         },
       }

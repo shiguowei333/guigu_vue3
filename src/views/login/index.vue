@@ -27,12 +27,12 @@
     import { useRoute, useRouter } from 'vue-router'
     import { ElNotification } from 'element-plus'
     import { getTime } from '@/utils/time'
-    let loading = ref(false)
-    let $router = useRouter()
-    let $route = useRoute()
-    let useStore = useUserStore()
-    let loginForms = ref()
-    // 收集账号与密码数据
+    let loading = ref(false)// 登录按钮是否处在加载状态
+    let $router = useRouter()// 获取路由器
+    let $route = useRoute()// 获取路由
+    let useStore = useUserStore()// 获取用户pinia
+    let loginForms = ref()// 收集登录表单
+    // 收集账号与密码数据，给个默认值
     let loginForm = reactive({username: 'admin',password: '111111'})
     // 自定义校验姓名函数
     const validatorUserName = (rules: any,value: any,callback: any) => {
@@ -69,23 +69,28 @@
     // 登录按钮回调
     const login = async() => {
       try {
+        // 请求登录前校验表单
         await loginForms.value.validate()
+        // 表单校验通过按钮置为加载中
         loading.value = true
         try {
+          // 登录成功跳转加载菜单，显示登录成功提示，登录失败提示登录失败信息
           await useStore.userLogin(loginForm)
           let redirect: any = $route.query.redirect
           $router.push({path: redirect || '/'})
           ElNotification({
             type: 'success',
             message: '欢迎回来',
-            title: `HI,${getTime()}好`
+            title: `HI,${getTime()}好`,
+            offset: 40
           })
           loading.value = true
         } catch (error) {
           loading.value = false
           ElNotification({
             type: 'error',
-            message: (error as Error).message
+            message: (error as Error).message,
+            offset: 40
           })
         }
       } catch (error) {
