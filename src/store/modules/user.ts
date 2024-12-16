@@ -1,5 +1,7 @@
 // 用户相关的小仓库
 import { defineStore } from 'pinia'
+// 引入ts类型
+import type { loginFormData, loginResponseData, userInfoReponseData } from "@/api/user/type"
 // 引入接口
 import { reqLogin, reqUserInfo, reqLogout } from '@/api/user'
 import { GET_TOKEN, SET_TOEKN, REMOVE_TOKEN } from '@/utils/token'
@@ -17,8 +19,8 @@ let useUserStore = defineStore('User', {
   },
   actions: {
     // 用户登录方法，获取用户登陆后的token并存储到本地，登录失败提示信息
-    async userLogin(data: any) {
-      let result: any = await reqLogin(data)
+    async userLogin(data: loginFormData) {
+      let result: loginResponseData = await reqLogin(data)
       if(result.code == 200) {
         this.token = result.data as string
         SET_TOEKN(result.data as string)
@@ -29,7 +31,7 @@ let useUserStore = defineStore('User', {
     },
     // 获取用户信息的方法，携带token请求访问获取用户信息，获取失败记录
     async userInfo() {
-      let result = await reqUserInfo()
+      let result: userInfoReponseData = await reqUserInfo()
       if(result.code === 200) {
         this.username = result.data.name
         this.avatar = result.data.avatar
@@ -41,7 +43,7 @@ let useUserStore = defineStore('User', {
     // 用户退出方法，清空pinia用户信息，清除本地TOKEN信息
     async userLogout() {
       // 退出登录请求
-      let result = await reqLogout()
+      let result: any = await reqLogout()
       if(result.code == 200) {
         this.token = '',
         this.username = '',
