@@ -32,8 +32,9 @@
     v-model="dialogVisible"
     title="新增品牌"
     width="600"
+    :close="emptyDialog"
   >
-    <el-form :style="{width:'80%'}"  label-position="left">
+    <el-form :style="{width:'80%'}"  label-position="left" ref="traForm">
       <el-form-item label="品牌名称" label-width="80px">
         <el-input aria-placeholder="请输入品牌名称" v-model="trademarkParams.tmName"></el-input>
       </el-form-item>
@@ -65,6 +66,7 @@
   import { TradeMark } from '@/api/product/trademark/type'
   import { ElMessage } from 'element-plus'
   import type { UploadProps } from 'element-plus'
+  let traForm = ref()
   let pageNo = ref<number>(1)
   let pageSize = ref<number>(10)
   let total = ref<number>(0)
@@ -118,7 +120,7 @@
   }
   const confirm = async() => {
     let result: any = await reqAddTrademark(trademarkParams)
-    if(result == 200) {
+    if(result.code == 200) {
       ElMessage({
         type: 'success',
         message: '添加品牌成功'
@@ -131,6 +133,9 @@
         message: '添加品牌失败'
       })
     }
+  }
+  const emptyDialog = () => {
+    traForm.value.resetFields()
   }
 </script>
 
