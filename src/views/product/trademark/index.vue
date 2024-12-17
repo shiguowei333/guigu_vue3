@@ -13,8 +13,8 @@
         <el-table-column align="center" label="创建时间" prop="createTime"></el-table-column>
         <el-table-column align="center" label="修改时间" prop="updateTime"></el-table-column>
         <el-table-column align="center" label="操作">
-          <template #="">
-            <el-button type="primary" icon="Edit" @click="showDialog"></el-button>
+          <template #="{row}">
+            <el-button type="primary" icon="Edit" @click="updateDialog(row)"></el-button>
             <el-button type="primary" icon="Delete"></el-button>
           </template>
         </el-table-column>
@@ -31,7 +31,7 @@
     </el-card>
     <el-dialog
       v-model="dialogVisible"
-      title="新增品牌"
+      :title="dialogTitle"
       width="600"
       @close="emptyForm"
     >
@@ -63,11 +63,13 @@
   
 <script setup lang='ts'>
   import { ref, reactive, onMounted } from 'vue'
-  import { reqHasTrademark, reqAddTrademark } from '@/api/product/trademark'
+  import { reqHasTrademark, reqAddTrademark, updateTrademark } from '@/api/product/trademark'
   import { Records, TradeMarkResponseData } from '@/api/product/trademark/type'
   import { TradeMark } from '@/api/product/trademark/type'
   import { ElMessage } from 'element-plus'
   import type { UploadProps } from 'element-plus'
+  let id = 0 // dialog操作判断 0/新增 其他/修改
+  let dialogTitle = ref('')
   let pageNo = ref<number>(1)
   let pageSize = ref<number>(10)
   let total = ref<number>(0)
@@ -91,6 +93,15 @@
   }
 
   const showDialog = () => {
+    id = 0
+    dialogTitle.value = '添加品牌'
+    dialogVisible.value = true
+  }
+  const updateDialog = (row: TradeMark) => {
+    id = row.id as number
+    dialogTitle.value = '修改品牌'
+    trademarkParams.tmName = row.tmName
+    trademarkParams.logoUrl = row.logoUrl
     dialogVisible.value = true
   }
   const closeDialog = () => {
@@ -121,21 +132,28 @@
     trademarkParams.logoUrl = response.data
   }
   const confirm = async() => {
-    let result: any = await reqAddTrademark(trademarkParams)
+    let result:any = {}
+    if(id) {
+      result = updateTrademark({id,...trademarkParams})
+    }else {
+      result = await reqAddTrademark(trademarkParams)
+    }
     if(result.code == 200) {
       ElMessage({
         type: 'success',
-        message: '添加品牌成功'
+        message: id?'添加品牌成功':'添加品牌成功'
       })
       getHasTrademark()
+      if(!id) pageNo.value = 1
       dialogVisible.value = false
     }else {
       ElMessage({
         type: 'error',
-        message: '添加品牌失败'
+        message: id?'修改品牌失败':'添加品牌失败'
       })
     }
   }
+
   const emptyForm = () => {
     trademarkParams.tmName = ''
     trademarkParams.logoUrl = ''
