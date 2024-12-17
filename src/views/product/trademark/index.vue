@@ -6,7 +6,7 @@
       <el-table-column align="center" label="品牌名称" prop="tmName"></el-table-column>
       <el-table-column align="center" label="品牌LOGO">
         <template #="{row}">
-          <img :src="row.logoUrl" style="width: 10px;height: 10px;">
+          <img :src="row.logoUrl" style="width: 30px;height: 30px;">
         </template>
       </el-table-column>
       <el-table-column align="center" label="创建时间" prop="createTime"></el-table-column>
@@ -18,7 +18,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[10,20,50,100]" :background="true" layout="->, total, sizes, prev, pager, next, jumper" :total="total">
+    <el-pagination
+     v-model:current-page="pageNo"
+     v-model:page-size="pageSize"
+     :page-sizes="[10,20,50,100]"
+     :background="true" layout="->, total, sizes, prev, pager, next, jumper"
+     :total="total"
+     @change="getHasTrademark"
+    >
     </el-pagination>
   </el-card>
   
