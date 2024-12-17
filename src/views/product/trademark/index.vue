@@ -35,31 +35,45 @@
   >
     <el-form :style="{width:'80%'}"  label-position="left">
       <el-form-item label="品牌名称" label-width="80px">
-        <el-input aria-placeholder="请输入品牌名称"></el-input>
+        <el-input aria-placeholder="请输入品牌名称" v-model="trademarkParams.tmName"></el-input>
       </el-form-item>
       <el-form-item label="品牌logo" label-width="80px">
         <el-upload
           class="avatar-uploader"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          action="/api/admin/product/fileUpload"
           :show-file-list="false"
+          :before-upload="beforeAvatarUpload"
+          :on-success="handleAvatarSuccess"
+          accept=".jpg,.png,.gif,.jpeg"
         >
-          <img v-if="false" src="https://www.baidu.com" class="avatar" />
+          <img v-if="trademarkParams.logoUrl" :src="trademarkParams.logoUrl" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
     </el-form>
+    <template #footer>
+      <el-button @click="closeDialog">取消</el-button>
+      <el-button type="primary" @click="confirm">确定</el-button>
+    </template>
   </el-dialog>
 </template>
   
 <script setup lang='ts'>
-  import { ref, onMounted } from 'vue'
-  import { reqHasTrademark } from '@/api/product/trademark'
+  import { ref, reactive, onMounted } from 'vue'
+  import { reqHasTrademark, reqAddTrademark } from '@/api/product/trademark'
   import { Records, TradeMarkResponseData } from '@/api/product/trademark/type'
+  import { TradeMark } from '@/api/product/trademark/type'
+  import { ElMessage } from 'element-plus'
+  import type { UploadProps } from 'element-plus'
   let pageNo = ref<number>(1)
   let pageSize = ref<number>(10)
   let total = ref<number>(0)
   let trademarkArr = ref<Records>([])
   let dialogVisible = ref<boolean>(false)
+  let trademarkParams = reactive<TradeMark>({
+    tmName: '',
+    logoUrl: ''
+  })
 
   onMounted(() => {
     getHasTrademark()
@@ -78,6 +92,45 @@
   }
   const closeDialog = () => {
     dialogVisible.value = false
+  }
+
+  const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+    if(rawFile.type=='image/png'||rawFile.type=='image/jpg'||rawFile.type=='image/gif') {
+      if(rawFile.size/1024/1024<4) {
+        return true
+      }else {
+        ElMessage({
+        type: 'error',
+        message: '上传文件大小不能超过4M'
+      })
+      return false
+      }
+    }else {
+      ElMessage({
+        type: 'error',
+        message: '上传文件格式务必PNG|JPG|GIF'
+      })
+      return false
+    }
+  }
+  const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+    trademarkParams.logoUrl = response.data
+  }
+  const confirm = async() => {
+    let result: any = await reqAddTrademark(trademarkParams)
+    if(result == 200) {
+      ElMessage({
+        type: 'success',
+        message: '添加品牌成功'
+      })
+      getHasTrademark()
+      dialogVisible.value = false
+    }else {
+      ElMessage({
+        type: 'error',
+        message: '添加品牌失败'
+      })
+    }
   }
 </script>
 
