@@ -35,11 +35,11 @@
       width="600"
       @close="emptyForm"
     >
-      <el-form :style="{width:'80%'}"  label-position="left">
-        <el-form-item label="品牌名称" label-width="80px">
+      <el-form :style="{width:'80%'}"  label-position="left" :rules="rules" :model="trademarkParams" ref="formRef">
+        <el-form-item label="品牌名称" label-width="90px" prop="tmName">
           <el-input aria-placeholder="请输入品牌名称" v-model="trademarkParams.tmName"></el-input>
         </el-form-item>
-        <el-form-item label="品牌logo" label-width="80px">
+        <el-form-item label="品牌logo" label-width="90px" prop="logoUrl">
           <el-upload
             class="avatar-uploader"
             action="/api/admin/product/fileUpload"
@@ -67,7 +67,8 @@
   import { Records, TradeMarkResponseData } from '@/api/product/trademark/type'
   import { TradeMark } from '@/api/product/trademark/type'
   import { ElMessage } from 'element-plus'
-  import type { UploadProps } from 'element-plus'
+  import type { UploadProps, FormInstance } from 'element-plus'
+  let formRef = ref<FormInstance>()
   let id = 0 // dialog操作判断 0/新增 其他/修改
   let dialogTitle = ref('')
   let pageNo = ref<number>(1)
@@ -130,8 +131,10 @@
   }
   const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
     trademarkParams.logoUrl = response.data
+    formRef.value?.clearValidate('logoUrl')
   }
   const confirm = async() => {
+    await formRef.value?.validate()
     let result:any = {}
     if(id) {
       result = updateTrademark({id,...trademarkParams})
@@ -155,8 +158,29 @@
   }
 
   const emptyForm = () => {
-    trademarkParams.tmName = ''
-    trademarkParams.logoUrl = ''
+    formRef.value?.resetFields()
+  }
+
+  const validatorTmName = (rule: any, value: any, callback: any) => {
+    if(value.trim().length >= 2) {
+      callback()
+    }else {
+      callback(new Error('品牌名称至少为2位'))
+    }
+  }
+
+  const validatorLogoUrl = (rule: any, value: any, callback: any) => {
+    if(value) {
+      callback()
+    }else {
+      callback(new Error('LOGO图片务必上传'))
+    }
+  }
+
+
+  const rules = {
+    tmName: [{required: true, trigger: 'blur', validator: validatorTmName}],
+    logoUrl: [{required: true, validator: validatorLogoUrl}]
   }
 </script>
 
