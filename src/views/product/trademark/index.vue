@@ -15,7 +15,7 @@
         <el-table-column align="center" label="操作">
           <template #="{row}">
             <el-button type="primary" icon="Edit" @click="updateDialog(row)"></el-button>
-            <el-button type="primary" icon="Delete"></el-button>
+            <el-button type="primary" icon="Delete" @click="deleteMessage(row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,10 +63,10 @@
   
 <script setup lang='ts'>
   import { ref, reactive, onMounted } from 'vue'
-  import { reqHasTrademark, reqAddTrademark, updateTrademark } from '@/api/product/trademark'
+  import { reqHasTrademark, reqAddTrademark, reqUpdateTrademark, reqDeleteTrademark} from '@/api/product/trademark'
   import { Records, TradeMarkResponseData } from '@/api/product/trademark/type'
   import { TradeMark } from '@/api/product/trademark/type'
-  import { ElMessage } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import type { UploadProps, FormInstance } from 'element-plus'
   let formRef = ref<FormInstance>()
   let id = 0 // dialog操作判断 0/新增 其他/修改
@@ -137,7 +137,7 @@
     await formRef.value?.validate()
     let result:any = {}
     if(id) {
-      result = updateTrademark({id,...trademarkParams})
+      result = reqUpdateTrademark({id,...trademarkParams})
     }else {
       result = await reqAddTrademark(trademarkParams)
     }
@@ -146,8 +146,8 @@
         type: 'success',
         message: id?'添加品牌成功':'添加品牌成功'
       })
-      getHasTrademark()
       if(!id) pageNo.value = 1
+      getHasTrademark()
       dialogVisible.value = false
     }else {
       ElMessage({
@@ -177,10 +177,41 @@
     }
   }
 
-
   const rules = {
     tmName: [{required: true, trigger: 'blur', validator: validatorTmName}],
     logoUrl: [{required: true, validator: validatorLogoUrl}]
+  }
+
+  const deleteMessage = (row: TradeMark) => {
+    ElMessageBox.confirm(
+    `您确定要删除${row.tmName}么？`,
+    '提示',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(async() => {
+      let result = await reqDeleteTrademark(row.id as number)
+      if(result.code == 200) {
+        ElMessage({
+          type: 'success',
+          message: '删除品牌成功',
+        })
+      }else {
+        ElMessage({
+          type: 'error',
+          message: '删除品牌失败'
+        })
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除',
+      })
+    })
   }
 </script>
 
