@@ -3,7 +3,7 @@
     <el-card :body-style="{height:'90vh'}">
       <el-button type="primary" icon="Plus" @click="showDialog">添加品牌</el-button>
       <el-table style="margin: 30px 0;height: 72vh;" border :data="trademarkArr" table-layout="auto" :row-style="{height: '6.5vh'}">
-        <el-table-column align="center" label="序号" type="index"></el-table-column>
+        <el-table-column align="center" label="序号" type="index" min-width="1"></el-table-column>
         <el-table-column align="center" label="品牌名称" prop="tmName"></el-table-column>
         <el-table-column align="center" label="品牌LOGO">
           <template #="{row}">
