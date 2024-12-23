@@ -13,17 +13,17 @@
         </el-form-item>
         <el-form-item label="SPU图片">
           <el-upload
-          v-model:file-list="fileList"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          v-model:file-list="imgList"
+          action="/api/admin/product/fileUpload"
           list-type="picture-card"
           :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
+          :before-upload="handleUpload"
           >
             <el-icon><Plus /></el-icon>
           </el-upload>
       
           <el-dialog v-model="dialogVisible">
-            <img w-full :src="dialogImageUrl" alt="Preview Image" />
+            <img w-full :src="dialogImageUrl" alt="Preview Image" style="width: 100%;height: 100%;" />
           </el-dialog>
         </el-form-item>
         <el-form-item label="SPU销售属性">
@@ -51,7 +51,9 @@
   import { reqAllTradeMark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr } from '@/api/product/spu/index'
   import {  HasSaleAttr, SaleAttr, SpuImg, SpuData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData } from '@/api/product/spu/type'
   import { TradeMark } from '@/api/product/trademark/type';
+import { ElMessage } from 'element-plus';
   import { ref } from 'vue'
+  
 
   let allTradeMark = ref<TradeMark[]>([])
   let $emit = defineEmits(['changeScene'])
@@ -66,6 +68,8 @@
     spuImageList: [],
     spuSaleAttrList: []
   })
+  let dialogVisible = ref<boolean>(false)
+  let dialogImageUrl = ref<string>('')
   const cancel = () => {
     $emit('changeScene',0)
   }
@@ -76,11 +80,40 @@
     let result2: SaleAttrResponseData = await reqSpuHasSaleAttr(spu.id as number)
     let result3: HasSaleAttrRespondseData = await reqAllSaleAttr()
     allTradeMark.value = result.data
-    imgList.value = result1.data
+    imgList.value = result1.data.map(item => {
+      return {
+        name: item.imgName,
+        url: item.imgUrl
+      }
+    })
     saleAttr.value = result2.data
     allSaleAttr.value = result3.data
   }
 
+  const handlePictureCardPreview = (file: any) => {
+    dialogImageUrl.value = file.url
+    dialogVisible.value = true
+  }
+
+  const handleUpload = (file: any) => {
+    if(file.type == 'image/png' || file.type == 'image/jpeg' || file.type == 'image/gif') {
+      if(file.size/1024/1024 < 3) {
+        return true
+      }else {
+        ElMessage({
+        type: 'error',
+        message: '上传文件大小不能超过3M'
+        })
+        return false
+      }
+    }else {
+      ElMessage({
+        type: 'error',
+        message: '上传文件必须是PNG|JPEG|GIF'
+      })
+      return false
+    }
+  }
   defineExpose({initHasSpuData})
 </script>
   
