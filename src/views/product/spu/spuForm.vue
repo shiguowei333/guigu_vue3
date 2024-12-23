@@ -1,17 +1,15 @@
 <template>
     <el-form label-width="100px">
         <el-form-item label="SPU名称">
-          <el-input placeholder="请输入SPU名称"></el-input>
+          <el-input placeholder="请输入SPU名称" v-model="spuParams.spuName"></el-input>
         </el-form-item>
         <el-form-item label="SPU品牌">
-          <el-select>
-              <el-option>xiaomi</el-option>
-              <el-option>oppo</el-option>
-              <el-option>vivo</el-option>
+          <el-select v-model="spuParams.tmId">
+              <el-option v-for="(item,index) in allTradeMark" :key="item.id" :label="item.tmName" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="SPU描述">
-          <el-input type="textarea" placeholder="请输入SPU描述"></el-input>
+          <el-input type="textarea" placeholder="请输入SPU描述" v-model="spuParams.description"></el-input>
         </el-form-item>
         <el-form-item label="SPU图片">
           <el-upload
@@ -60,10 +58,19 @@
   let imgList = ref<SpuImg[]>([])
   let saleAttr = ref<SaleAttr[]>([])
   let allSaleAttr= ref<HasSaleAttr[]>()
+  let spuParams = ref<SpuData>({
+    category3Id: '',
+    spuName: '',
+    description: '',
+    tmId: '',
+    spuImageList: [],
+    spuSaleAttrList: []
+  })
   const cancel = () => {
     $emit('changeScene',0)
   }
   const initHasSpuData = async(spu: SpuData) => {
+    spuParams.value = spu
     let result: AllTradeMark = await reqAllTradeMark()
     let result1: SpuHasImg = await reqSpuImageList(spu.id as number)
     let result2: SaleAttrResponseData = await reqSpuHasSaleAttr(spu.id as number)

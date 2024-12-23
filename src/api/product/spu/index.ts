@@ -7,7 +7,7 @@ enum API {
   ALLTRADEMARK_URL = '/admin/product/baseTrademark/getTrademarkList',
   IMAGE_URL = '/admin/product/spuImageList/',
   SPUHASSALEATTR_URL = '/admin/product/spuSaleAttrList/',
-  ALLSALEATTR_URL = '/admin/product/baseSaleAttrList'，
+  ALLSALEATTR_URL = '/admin/product/baseSaleAttrList',
   ADDSPU_URL = '/admin/product/saveSpuInfo',
   UPDATESPU_URL = '/admin/product/updateSpuInfo'
 }
