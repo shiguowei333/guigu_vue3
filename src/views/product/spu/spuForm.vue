@@ -33,11 +33,20 @@
               <el-option label="小米"></el-option>
           </el-select>
           <el-button type="primary" icon="Plus" style="margin: 0 10px;">添加属性值</el-button>
-          <el-table border style="margin: 10px 0;">
+          <el-table border style="margin: 10px 0;" :data="saleAttr">
               <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
-              <el-table-column label="销售属性名字" width="120px"></el-table-column>
-              <el-table-column label="销售属性值"></el-table-column>
-              <el-table-column label="操作" width="100px"></el-table-column>
+              <el-table-column label="销售属性名字" width="120px" prop="saleAttrName"></el-table-column>
+              <el-table-column label="销售属性值">
+                <template #="{row,$index}">
+                  <el-tag style="margin:0 5px;" v-for="(item,index) in row.spuSaleAttrValueList" :key="item.id" >{{ item.saleAttrValueName }}</el-tag>
+                  <el-button type="primary" size="small" icon="Plus"></el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="100px">
+                <template #="{row,$index}">
+                  <el-button type="primary" icon="Delete" @click="saleAttr.splice($index,1)"></el-button>
+                </template>
+              </el-table-column>
           </el-table>
         </el-form-item>
         <el-form-item>
@@ -51,7 +60,7 @@
   import { reqAllTradeMark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr } from '@/api/product/spu/index'
   import {  HasSaleAttr, SaleAttr, SpuImg, SpuData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData } from '@/api/product/spu/type'
   import { TradeMark } from '@/api/product/trademark/type';
-import { ElMessage } from 'element-plus';
+  import { ElMessage } from 'element-plus';
   import { ref } from 'vue'
   
 
