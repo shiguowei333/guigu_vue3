@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card :body-style="{height:'70px'}">
       <el-form :inline="true">
         <el-form-item label="一级分类">
           <el-select style="width: 200px" v-model="c1Id" @change="handle1" :disabled="scene">
@@ -18,7 +18,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card style="margin: 10px 0;overflow-y: auto;" :body-style="{height:'82vh'}">
+    <el-card style="margin-top: 10px;overflow-y: auto;" :body-style="{height:'81vh'}">
       <div v-show="scene == 0">
         <el-button type="primary" icon="Plus" :disabled="!c3Id" @click="addAttr">添加属性</el-button>
         <el-table border style="margin: 10px 0;" :data="attrArr">

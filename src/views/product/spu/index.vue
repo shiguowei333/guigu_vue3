@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+    <el-card :body-style="{height:'70px'}">
     <el-form :inline="true">
       <el-form-item label="一级分类">
         <el-select style="width: 200px" v-model="c1Id" @change="handle1" :disabled="scene">
@@ -21,10 +21,10 @@
   </el-card>
   </div>
   <div>
-    <el-card style="margin: 10px 0;" :body-style="{height:'82vh'}">
+    <el-card style="margin-top: 10px;" :body-style="{height:'81vh'}">
         <div v-show="scene == 0">
           <el-button type="primary" icon="Plus" :disabled="!c3Id" @click="addSpu">添加SPU</el-button>
-          <el-table :data="records" style="margin: 10px 0;height: 72vh;" :row-style="{height: '6.5vh'}" border>
+          <el-table :data="records" style="margin: 10px 0;height: 68vh;" :row-style="{height: '6.5vh'}" border>
               <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
               <el-table-column prop="spuName" label="SPU名称"></el-table-column>
               <el-table-column prop="description" label="SPU描述" show-overflow-tooltip></el-table-column>
