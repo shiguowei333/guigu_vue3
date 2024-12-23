@@ -50,10 +50,31 @@
 </template>
   
 <script setup lang='ts'>
+  import { reqAllTradeMark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr } from '@/api/product/spu/index'
+  import {  HasSaleAttr, SaleAttr, SpuImg, SpuData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData } from '@/api/product/spu/type'
+  import { TradeMark } from '@/api/product/trademark/type';
+  import { ref } from 'vue'
+
+  let allTradeMark = ref<TradeMark[]>([])
   let $emit = defineEmits(['changeScene'])
+  let imgList = ref<SpuImg[]>([])
+  let saleAttr = ref<SaleAttr[]>([])
+  let allSaleAttr= ref<HasSaleAttr[]>()
   const cancel = () => {
     $emit('changeScene',0)
   }
+  const initHasSpuData = async(spu: SpuData) => {
+    let result: AllTradeMark = await reqAllTradeMark()
+    let result1: SpuHasImg = await reqSpuImageList(spu.id as number)
+    let result2: SaleAttrResponseData = await reqSpuHasSaleAttr(spu.id as number)
+    let result3: HasSaleAttrRespondseData = await reqAllSaleAttr()
+    allTradeMark.value = result.data
+    imgList.value = result1.data
+    saleAttr.value = result2.data
+    allSaleAttr.value = result3.data
+  }
+
+  defineExpose({initHasSpuData})
 </script>
   
 <style scoped lang="scss">

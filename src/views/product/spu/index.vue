@@ -31,7 +31,7 @@
               <el-table-column label="操作" width="300px">
                 <template #="{row,$index}">
                   <el-button type="primary" icon="Plus" title="添加SPU"></el-button>
-                  <el-button type="primary" icon="Edit" title="修改SPU" @click="updateSpu"></el-button>
+                  <el-button type="primary" icon="Edit" title="修改SPU" @click="updateSpu(row)"></el-button>
                   <el-button type="primary" icon="View" title="查看SKU列表"></el-button>
                   <el-button type="primary" icon="Delete" title="删除SPU"></el-button>
                 </template>
@@ -48,7 +48,7 @@
           @size-change="getHasSpu"
           />
         </div>
-        <SpuForm v-show="scene == 1" @changeScene="changeScene"></SpuForm>
+        <SpuForm ref="spu" v-show="scene == 1" @changeScene="changeScene"></SpuForm>
         <SkuForm v-show="scene == 2"></SkuForm>
     </el-card>
   </div>
@@ -62,7 +62,7 @@
   import { reqC1, reqC2, reqC3} from '@/api/product/attr'
   import { ref, onMounted } from 'vue'
   import { reqHasSpu } from '@/api/product/spu'
-  import { HasSpuResponseData, Records } from '@/api/product/spu/type'
+  import { HasSpuResponseData, Records, SpuData } from '@/api/product/spu/type'
   let scene = ref<number>(0)
   let c1Arr = ref<CategoryObj[]>([])
   let c1Id = ref<number|string>('')
@@ -74,6 +74,7 @@
   let pageSize = ref<number>(10)
   let total = ref<number>(0)
   let records = ref<Records>([])
+  let spu = ref<any>()
 
   onMounted(() => {
     getC1()
@@ -132,7 +133,8 @@
     scene.value = 1
   }
 
-  const updateSpu = () => {
+  const updateSpu = (row: SpuData) => {
+    spu.value.initHasSpuData(row)
     scene.value = 1
   }
 
