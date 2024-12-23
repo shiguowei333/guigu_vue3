@@ -21,7 +21,7 @@
     <el-card style="margin-top: 10px;overflow-y: auto;" :body-style="{height:'81vh'}">
       <div v-show="scene == 0">
         <el-button type="primary" icon="Plus" :disabled="!c3Id" @click="addAttr">添加属性</el-button>
-        <el-table border style="margin: 10px 0;" :data="attrArr">
+        <el-table border style="margin-top: 10px;height: 72vh;" :data="attrArr">
           <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
           <el-table-column label="属性名称" align="center" width="120px" prop="attrName"></el-table-column>
           <el-table-column label="属性值名称" align="center">

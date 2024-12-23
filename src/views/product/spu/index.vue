@@ -24,7 +24,7 @@
     <el-card style="margin-top: 10px;" :body-style="{height:'81vh'}">
         <div v-show="scene == 0">
           <el-button type="primary" icon="Plus" :disabled="!c3Id" @click="addSpu">添加SPU</el-button>
-          <el-table :data="records" style="margin: 10px 0;height: 68vh;" :row-style="{height: '6.5vh'}" border>
+          <el-table :data="records" style="margin: 10px 0;height: 68vh;" :row-style="{height: '6.3vh'}" border>
               <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
               <el-table-column prop="spuName" label="SPU名称"></el-table-column>
               <el-table-column prop="description" label="SPU描述" show-overflow-tooltip></el-table-column>

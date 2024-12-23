@@ -26,3 +26,63 @@ export interface HasSpuResponseData extends ResponseData {
     pages: number
   }
 }
+
+export interface Trademark {
+  id: number,
+  tmName: string,
+  logoUrl: string
+}
+
+export interface AllTradeMark extends ResponseData {
+  data: Trademark[]
+}
+
+export interface SpuImg {
+  id: number,
+  createTime: string,
+  updateTime: string,
+  spuId: number,
+  imgName: string,
+  imgUrl: string
+}
+
+export interface SpuHasImg extends ResponseData {
+  data: SpuImg[]
+}
+
+export interface SaleAttrValue {
+  id?: number,
+  createTime: string,
+  updateTime: string,
+  spuId: number,
+  baseSaleAttrId: string,
+  saleAttrValueName: string,
+  saleAttrName: string,
+  isChecked: string
+}
+
+export type SpuSaleAttrValueList = SaleAttrValue[]
+
+export interface SaleAttr {
+  id?: number,
+  createTime: string,
+  updateTime: string,
+  spuId: number,
+  baseSaleAttrId: string,
+  saleAttrValueName: string,
+  saleAttrName: string,
+  spuSaleAttrValueList: SpuSaleAttrValueList
+}
+
+export interface SaleAttrResponseData extends ResponseData {
+  data: SaleAttr[]
+}
+
+export interface HasSaleAttr {
+  id: number,
+  name: string
+}
+
+export interface HasSaleAttrRespondseData extends ResponseData {
+  data: HasSaleAttr[]
+}
