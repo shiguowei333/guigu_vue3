@@ -36,8 +36,9 @@
               <el-table-column label="销售属性名字" width="120px" prop="saleAttrName"></el-table-column>
               <el-table-column label="销售属性值">
                 <template #="{row,$index}">
-                  <el-tag style="margin:0 5px;" v-for="(item,index) in row.spuSaleAttrValueList" :key="item.id" >{{ item.saleAttrValueName }}</el-tag>
-                  <el-button type="primary" size="small" icon="Plus"></el-button>
+                  <el-tag closable style="margin:0 5px;" @close="row.spuSaleAttrValueList.splice(index,1)" v-for="(item,index) in row.spuSaleAttrValueList" :key="item.id" >{{ item.saleAttrValueName }}</el-tag>
+                  <el-input @blur="toLook(row)" v-model="row.saleAttrValue" v-if="row.flag==true" placeholder="请输入属性值" size="small" style="width: 100px;"></el-input>
+                  <el-button @click="toEdit(row)" v-else type="primary" size="small" icon="Plus"></el-button>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100px">
@@ -56,7 +57,7 @@
   
 <script setup lang='ts'>
   import { reqAllTradeMark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr } from '@/api/product/spu/index'
-  import {  HasSaleAttr, SaleAttr, SpuImg, SpuData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData } from '@/api/product/spu/type'
+  import {  SaleAttrValue, HasSaleAttr, SaleAttr, SpuImg, SpuData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData } from '@/api/product/spu/type'
   import { TradeMark } from '@/api/product/trademark/type';
   import { ElMessage } from 'element-plus';
   import { ref, computed } from 'vue'
@@ -78,6 +79,7 @@
   let dialogVisible = ref<boolean>(false)
   let dialogImageUrl = ref<string>('')
   let saleAttrIdAndValueName = ref<string>('')
+
 
   const cancel = () => {
     $emit('changeScene',0)
@@ -142,6 +144,38 @@
     }
     saleAttr.value.push(newSaleAttr)
     saleAttrIdAndValueName.value = ''
+  }
+
+  const toEdit = (row: SaleAttr) => {
+    row.flag = true
+    row.saleAttrValue = ''
+  }
+
+  const toLook = (row: SaleAttr) => {
+    const { baseSaleAttrId, saleAttrValue } = row
+    let newSaleAttrValue: SaleAttrValue = {
+      baseSaleAttrId,
+      saleAttrValueName: saleAttrValue as string
+    }
+    if((saleAttrValue as string).trim() == '') {
+      ElMessage({
+        type: 'error',
+        message: '属性值不能为空'
+      })
+      return
+    }
+    let repeat = row.spuSaleAttrValueList.find(item => {
+      return item.saleAttrValueName == saleAttrValue
+    })
+    if(repeat) {
+      ElMessage({
+        type: 'error',
+        message: '属性值重复'
+      })
+      return
+    }
+    row.spuSaleAttrValueList.push(newSaleAttrValue)
+    row.flag = false
   }
 
   defineExpose({initHasSpuData})
