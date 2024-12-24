@@ -30,7 +30,7 @@
               <el-table-column prop="description" label="SPU描述" show-overflow-tooltip></el-table-column>
               <el-table-column label="操作" width="300px">
                 <template #="{row,$index}">
-                  <el-button type="primary" icon="Plus" title="添加SPU"></el-button>
+                  <el-button type="primary" icon="Plus" title="添加SKU" @click="addSku"></el-button>
                   <el-button type="primary" icon="Edit" title="修改SPU" @click="updateSpu(row)"></el-button>
                   <el-button type="primary" icon="View" title="查看SKU列表"></el-button>
                   <el-button type="primary" icon="Delete" title="删除SPU"></el-button>
@@ -130,6 +130,7 @@
   }
 
   const addSpu = () => {
+    spu.value.initAddSpu(c3Id)
     scene.value = 1
   }
 
@@ -140,6 +141,11 @@
 
   const changeScene = (num: number) => {
     scene.value = num
+    getHasSpu()
+  }
+
+  const addSku = () => {
+    scene.value = 2
   }
 </script>
   

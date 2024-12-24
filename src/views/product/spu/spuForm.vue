@@ -49,14 +49,14 @@
           </el-table>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">保存</el-button>
+          <el-button :disabled="saleAttr.length>0?false:true" type="primary" @click="save">保存</el-button>
           <el-button type="primary" @click="cancel">取消</el-button>
         </el-form-item>
     </el-form>
 </template>
   
 <script setup lang='ts'>
-  import { reqAllTradeMark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr } from '@/api/product/spu/index'
+  import { reqAllTradeMark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr, reqAddOrUpdateSPU } from '@/api/product/spu/index'
   import {  SaleAttrValue, HasSaleAttr, SaleAttr, SpuImg, SpuData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData } from '@/api/product/spu/type'
   import { TradeMark } from '@/api/product/trademark/type';
   import { ElMessage } from 'element-plus';
@@ -178,7 +178,50 @@
     row.flag = false
   }
 
-  defineExpose({initHasSpuData})
+  const save = async() => {
+    spuParams.value.spuImageList = imgList.value.map((item: any) => {
+      return {
+        imgName: item.name,
+        imgUrl: (item.response && item.response.data) || item.url
+      }
+    })
+    spuParams.value.spuSaleAttrList = saleAttr.value
+    let result: any = await reqAddOrUpdateSPU(spuParams.value)
+    if(result.code == 200) {
+      ElMessage({
+        type: 'success',
+        message: spuParams.value.id ? '更新成功':'添加成功'
+      })
+      $emit('changeScene',0)
+    }else {
+      ElMessage({
+        type: 'error',
+        message: spuParams.value.id ? '更新失败':'添加失败'
+      })
+      $emit('changeScene',0)
+    }
+  }
+
+  const initAddSpu = async(c3Id: number|string) => {
+
+    Object.assign(spuParams.value,{
+      category3Id: '',
+      spuName: '',
+      description: '',
+      tmId: '',
+      spuImageList: [],
+      spuSaleAttrList: []
+    })
+    imgList.value = []
+    saleAttr.value = []
+    saleAttrIdAndValueName.value = ''
+    spuParams.value.category3Id = c3Id
+    let result: AllTradeMark = await reqAllTradeMark()
+    let result1: HasSaleAttrRespondseData = await reqAllSaleAttr()
+    allTradeMark.value = result.data
+    allSaleAttr.value = result1.data
+  }
+  defineExpose({initHasSpuData,initAddSpu})
 </script>
   
 <style scoped lang="scss">
