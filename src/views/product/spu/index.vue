@@ -49,7 +49,7 @@
           />
         </div>
         <SpuForm ref="spu" v-show="scene == 1" @changeScene="changeScene"></SpuForm>
-        <SkuForm v-show="scene == 2"></SkuForm>
+        <SkuForm v-show="scene == 2" @changeScene="changeScene"></SkuForm>
     </el-card>
   </div>
 
