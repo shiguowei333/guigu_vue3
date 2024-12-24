@@ -27,12 +27,10 @@
           </el-dialog>
         </el-form-item>
         <el-form-item label="SPU销售属性">
-          <el-select v-model="model" placeholder="" style="width: 150px;">
-              <el-option label="小米"></el-option>
-              <el-option label="小米"></el-option>
-              <el-option label="小米"></el-option>
+          <el-select v-model="saleAttrIdAndValueName"  style="width: 150px;" :placeholder="unSelectSaleAttr.length?`还未选择${unSelectSaleAttr.length}个`:'暂无数据'">
+              <el-option :value="`${item.id}:${item.name}`" :label="item.name" v-for="(item,index) in unSelectSaleAttr" :key="item.id"></el-option>
           </el-select>
-          <el-button type="primary" icon="Plus" style="margin: 0 10px;">添加属性值</el-button>
+          <el-button @click="addSaleAttr" :disabled="saleAttrIdAndValueName?false:true" type="primary" icon="Plus" style="margin: 0 10px;">添加属性</el-button>
           <el-table border style="margin: 10px 0;" :data="saleAttr">
               <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
               <el-table-column label="销售属性名字" width="120px" prop="saleAttrName"></el-table-column>
@@ -61,14 +59,14 @@
   import {  HasSaleAttr, SaleAttr, SpuImg, SpuData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData } from '@/api/product/spu/type'
   import { TradeMark } from '@/api/product/trademark/type';
   import { ElMessage } from 'element-plus';
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   
 
   let allTradeMark = ref<TradeMark[]>([])
   let $emit = defineEmits(['changeScene'])
   let imgList = ref<SpuImg[]>([])
   let saleAttr = ref<SaleAttr[]>([])
-  let allSaleAttr= ref<HasSaleAttr[]>()
+  let allSaleAttr= ref<HasSaleAttr[]>([])
   let spuParams = ref<SpuData>({
     category3Id: '',
     spuName: '',
@@ -79,6 +77,8 @@
   })
   let dialogVisible = ref<boolean>(false)
   let dialogImageUrl = ref<string>('')
+  let saleAttrIdAndValueName = ref<string>('')
+
   const cancel = () => {
     $emit('changeScene',0)
   }
@@ -123,6 +123,27 @@
       return false
     }
   }
+
+  let unSelectSaleAttr = computed(() => {
+    let unSelectAttr = allSaleAttr.value.filter(item => {
+      return saleAttr.value.every(item1 => {
+        return item.name != item1.saleAttrName
+      })
+    })
+    return unSelectAttr
+  })
+
+  const addSaleAttr = () => {
+    const [baseSaleAttrId, saleAttrName] = saleAttrIdAndValueName.value.split(':')
+    let newSaleAttr: SaleAttr = {
+      baseSaleAttrId,
+      saleAttrName,
+      spuSaleAttrValueList: []
+    }
+    saleAttr.value.push(newSaleAttr)
+    saleAttrIdAndValueName.value = ''
+  }
+
   defineExpose({initHasSpuData})
 </script>
   
