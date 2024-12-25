@@ -13,8 +13,8 @@
             <el-table-column prop="price" label="价格" align="center"></el-table-column>
             <el-table-column label="操作" align="center" fixed="right">
               <template #="{row,$index}">
-                <el-button type="primary" icon="Top"></el-button>
-                <el-button type="primary" icon="Edit"></el-button>
+                <el-button type="primary" :icon="row.isSale==1?'Bottom':'Top'" @click="updateSale(row)"></el-button>
+                <el-button type="primary" icon="Edit" @click="updateSku"></el-button>
                 <el-button type="primary" icon="InfoFilled"></el-button>
                 <el-button type="primary" icon="Delete"></el-button>
               </template>
@@ -33,8 +33,9 @@
 </template>
   
 <script setup lang='ts'>
-  import { reqSkuList } from '@/api/product/sku'
+  import { reqSkuList, reqSaleSku, reqCancelSale } from '@/api/product/sku'
   import type { SkuResponseData,SkuData } from '@/api/product/sku/type'
+import { ElMessage } from 'element-plus'
   import { ref, onMounted } from 'vue'
   let pageNo = ref(1)
   let pageSize = ref(10)
@@ -51,6 +52,31 @@
       total.value = result.data.total
       skuArr.value = result.data.records
     }
+  }
+
+  const updateSale = async(row: SkuData) => {
+    if(row.isSale == 1) {
+      await reqCancelSale(row.id as number)
+      ElMessage({
+        type:'success',
+        message: '下架成功'
+      })
+      getHasSku()
+    }else {
+      await reqSaleSku(row.id as number)
+      ElMessage({
+        type:'success',
+        message: '上架成功'
+      })
+      getHasSku()
+    }
+  }
+
+  const updateSku = () => {
+    ElMessage({
+        type:'success',
+        message: '功能正在开发中~'
+      })
   }
 </script>
   

@@ -24,7 +24,9 @@ export interface SkuData {
   skuDesc: string,
   skuAttrValueList?: Attr[],
   skuSaleAttrValueList?: saleAttr[],
-  skuDefaultImg: string
+  skuDefaultImg: string,
+  isSale?: number,
+  id?: number
 }
 
 export interface SkuResponseData extends ResponseData {
