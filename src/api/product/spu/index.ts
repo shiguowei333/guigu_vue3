@@ -1,5 +1,5 @@
 import request from "@/utils/requests"
-import type { HasSpuResponseData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData, SpuData, SkuData } from "./type"
+import type { HasSpuResponseData, AllTradeMark, SpuHasImg, SaleAttrResponseData, HasSaleAttrRespondseData, SpuData, SkuData, SkuInfoData } from "./type"
 
 
 enum API {
@@ -10,7 +10,8 @@ enum API {
   ALLSALEATTR_URL = '/admin/product/baseSaleAttrList',
   ADDSPU_URL = '/admin/product/saveSpuInfo',
   UPDATESPU_URL = '/admin/product/updateSpuInfo',
-  ADDSKU_URL = '/admin/product/saveSkuInfo'
+  ADDSKU_URL = '/admin/product/saveSkuInfo',
+  SKUINFO_URL = '/admin/product/findBySpuId/'
 }
 
 export const reqHasSpu = (page: number,limit: number,category3Id: string|number) => request.get<any,HasSpuResponseData>(API.HASSPU_URL + `${page}/${limit}?category3Id=${category3Id}`)
@@ -32,4 +33,6 @@ export const reqAddOrUpdateSPU = (data: SpuData) => {
 }
 
 export const reqAddSku = (data: SkuData) => request.post<any,any>(API.ADDSKU_URL,data)
+
+export const reqSkuList = (spuId: number|string) => request.get<any,SkuInfoData>(API.SKUINFO_URL + spuId)
 

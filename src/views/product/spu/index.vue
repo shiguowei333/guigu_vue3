@@ -32,7 +32,7 @@
                 <template #="{row,$index}">
                   <el-button type="primary" icon="Plus" title="添加SKU" @click="addSku(row)"></el-button>
                   <el-button type="primary" icon="Edit" title="修改SPU" @click="updateSpu(row)"></el-button>
-                  <el-button type="primary" icon="View" title="查看SKU列表"></el-button>
+                  <el-button type="primary" icon="View" title="查看SKU列表" @click="findSku(row)"></el-button>
                   <el-button type="primary" icon="Delete" title="删除SPU"></el-button>
                 </template>
               </el-table-column>
@@ -50,6 +50,18 @@
         </div>
         <SpuForm ref="spu" v-show="scene == 1" @changeScene="changeScene"></SpuForm>
         <SkuForm ref="sku" v-show="scene == 2" @changeScene="changeScene"></SkuForm>
+        <el-dialog title="SKU列表" v-model="show">
+            <el-table :data="skuArr" style="width: 90%;margin: 0 auto;" border>
+                <el-table-column prop="skuName" label="SKU名字"></el-table-column>
+                <el-table-column prop="price" label="SKU价格"></el-table-column>
+                <el-table-column prop="weight" label="SKU重量"></el-table-column>
+                <el-table-column label="SKU图片">
+                  <template #="{row,$index}">
+                    <img :src="row.skuDefaultImg" style="width: 100px;height: 100px;" alt="">
+                  </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
     </el-card>
   </div>
 
@@ -61,8 +73,8 @@
   import type { CategoryObj, CategoryResponseData } from '@/api/product/attr/type'
   import { reqC1, reqC2, reqC3} from '@/api/product/attr'
   import { ref, onMounted } from 'vue'
-  import { reqHasSpu } from '@/api/product/spu'
-  import { HasSpuResponseData, Records, SpuData } from '@/api/product/spu/type'
+  import { reqHasSpu, reqSkuList } from '@/api/product/spu'
+  import { HasSpuResponseData, Records, SpuData, SkuInfoData, SkuData } from '@/api/product/spu/type'
   let scene = ref<number>(0)
   let c1Arr = ref<CategoryObj[]>([])
   let c1Id = ref<number|string>('')
@@ -76,6 +88,8 @@
   let records = ref<Records>([])
   let spu = ref<any>()
   let sku = ref<any>()
+  let skuArr = ref<SkuData[]>([])
+  let show = ref<boolean>(false)
 
   onMounted(() => {
     getC1()
@@ -148,6 +162,14 @@
   const addSku = (row: SpuData) => {
     scene.value = 2
     sku.value.initSkuData(c1Id.value,c2Id.value,row)
+  }
+
+  const findSku = async(row: SpuData) => {
+    let result = await reqSkuList(row.id as number)
+    if(result.code == 200) {
+      skuArr.value = result.data
+      show.value = true
+    }
   }
 </script>
   
