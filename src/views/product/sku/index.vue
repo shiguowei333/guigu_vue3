@@ -16,7 +16,11 @@
                 <el-button type="primary" :icon="row.isSale==1?'Bottom':'Top'" @click="updateSale(row)"></el-button>
                 <el-button type="primary" icon="Edit" @click="updateSku"></el-button>
                 <el-button type="primary" icon="InfoFilled" @click="findSku(row)"></el-button>
-                <el-button type="primary" icon="Delete"></el-button>
+                <el-popconfirm :title="`确定要删除${row.skuName}吗`" @confirm="deleteSku(row)">
+                    <template #reference>
+                      <el-button type="primary" icon="Delete"></el-button>
+                    </template>
+                  </el-popconfirm>
               </template>
             </el-table-column>
         </el-table>
@@ -77,7 +81,7 @@
 </template>
   
 <script setup lang='ts'>
-  import { reqSkuList, reqSaleSku, reqCancelSale, reqSkuInfo } from '@/api/product/sku'
+  import { reqSkuList, reqSaleSku, reqCancelSale, reqSkuInfo, reqDeleteSku } from '@/api/product/sku'
   import type { SkuResponseData, SkuData, SkuInfoData } from '@/api/product/sku/type'
   import { ElMessage } from 'element-plus'
   import { ref, onMounted } from 'vue'
@@ -131,6 +135,22 @@
       skuInfo.value = result.data
     }
     drawer.value = true
+  }
+
+  const deleteSku = async(row: SkuData) => {
+    let result = await reqDeleteSku(row.id as number)
+    if(result.code == 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      getHasSku()
+    }else {
+      ElMessage({
+        type: 'error',
+        message: '删除失败'
+      })
+    }
   }
 </script>
   
