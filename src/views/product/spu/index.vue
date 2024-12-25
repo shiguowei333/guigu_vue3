@@ -33,7 +33,11 @@
                   <el-button type="primary" icon="Plus" title="添加SKU" @click="addSku(row)"></el-button>
                   <el-button type="primary" icon="Edit" title="修改SPU" @click="updateSpu(row)"></el-button>
                   <el-button type="primary" icon="View" title="查看SKU列表" @click="findSku(row)"></el-button>
-                  <el-button type="primary" icon="Delete" title="删除SPU"></el-button>
+                  <el-popconfirm :title="`确定要删除${row.spuName}吗`" @confirm="deleteSpu(row.id)">
+                    <template #reference>
+                      <el-button type="primary" icon="Delete" title="删除SPU"></el-button>
+                    </template>
+                  </el-popconfirm>
                 </template>
               </el-table-column>
           </el-table>
@@ -73,8 +77,9 @@
   import type { CategoryObj, CategoryResponseData } from '@/api/product/attr/type'
   import { reqC1, reqC2, reqC3} from '@/api/product/attr'
   import { ref, onMounted } from 'vue'
-  import { reqHasSpu, reqSkuList } from '@/api/product/spu'
+  import { reqHasSpu, reqSkuList, reqRemoveSpu } from '@/api/product/spu'
   import { HasSpuResponseData, Records, SpuData, SkuInfoData, SkuData } from '@/api/product/spu/type'
+import { ElMessage } from 'element-plus'
   let scene = ref<number>(0)
   let c1Arr = ref<CategoryObj[]>([])
   let c1Id = ref<number|string>('')
@@ -169,6 +174,22 @@
     if(result.code == 200) {
       skuArr.value = result.data
       show.value = true
+    }
+  }
+
+  const deleteSpu = async(spuId: number|string) => {
+    let result = await reqRemoveSpu(spuId)
+    if(result.code == 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      getHasSpu()
+    }else {
+      ElMessage({
+        type: 'error',
+        message: '删除失败'
+      })
     }
   }
 </script>
