@@ -15,7 +15,7 @@
               <template #="{row,$index}">
                 <el-button type="primary" :icon="row.isSale==1?'Bottom':'Top'" @click="updateSale(row)"></el-button>
                 <el-button type="primary" icon="Edit" @click="updateSku"></el-button>
-                <el-button type="primary" icon="InfoFilled" @click="findSku"></el-button>
+                <el-button type="primary" icon="InfoFilled" @click="findSku(row)"></el-button>
                 <el-button type="primary" icon="Delete"></el-button>
               </template>
             </el-table-column>
@@ -39,59 +39,54 @@
         <template #default>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">名称</el-col>
-              <el-col :span="18">华为mata</el-col>
+              <el-col :span="18">{{ skuInfo.skuName }}</el-col>
           </el-row>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">描述</el-col>
-              <el-col :span="18">华为mata</el-col>
+              <el-col :span="18">{{ skuInfo.skuDesc }}</el-col>
           </el-row>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">价格</el-col>
-              <el-col :span="18">华为mata</el-col>
+              <el-col :span="18">{{ skuInfo.price }}</el-col>
           </el-row>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">平台属性</el-col>
               <el-col :span="18">
-                <el-tag style="margin: 5px;" v-for="item in 10" type="success"></el-tag>
+                <el-tag style="margin: 5px;" v-for="(item,index) in skuInfo.skuAttrValueList" :key="item.id" type="success">{{ item.valueName }}</el-tag>
               </el-col>
           </el-row>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">销售属性</el-col>
               <el-col :span="18">
-                <el-tag style="margin: 5px;" v-for="item in 10" type="success"></el-tag>
+                <el-tag style="margin: 5px;" v-for="(item,index) in skuInfo.skuSaleAttrValueList" :key="item.id" type="success">{{ item.saleAttrValueName }}</el-tag>
               </el-col>
           </el-row>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">商品图片</el-col>
               <el-col :span="18">
                 <el-carousel :interval="4000" type="card" height="200px">
-                  <el-carousel-item v-for="item in 6" :key="item">
-                    <h3 text="2xl" justify="center">{{ item }}</h3>
+                  <el-carousel-item v-for="item in skuInfo.skuImageList" :key="item.id">
+                    <img :src="item.imgUrl" alt="" style="height: 100%;width: 100%;">
                   </el-carousel-item>
                 </el-carousel>
               </el-col>
           </el-row>
-        </template>
-        <template #footer>
-          <div style="flex: auto">
-            <el-button @click="cancelClick">cancel</el-button>
-            <el-button type="primary" @click="confirmClick">confirm</el-button>
-          </div>
         </template>
       </el-drawer>
     </el-card>
 </template>
   
 <script setup lang='ts'>
-  import { reqSkuList, reqSaleSku, reqCancelSale } from '@/api/product/sku'
-  import type { SkuResponseData,SkuData } from '@/api/product/sku/type'
-import { ElMessage } from 'element-plus'
+  import { reqSkuList, reqSaleSku, reqCancelSale, reqSkuInfo } from '@/api/product/sku'
+  import type { SkuResponseData, SkuData, SkuInfoData } from '@/api/product/sku/type'
+  import { ElMessage } from 'element-plus'
   import { ref, onMounted } from 'vue'
   let pageNo = ref(1)
   let pageSize = ref(10)
   let total = ref(0)
   let skuArr = ref<SkuData[]>()
   let drawer = ref<boolean>(false)
+  let skuInfo = ref<SkuData>({})
 
   onMounted(() => {
     getHasSku()
@@ -130,7 +125,11 @@ import { ElMessage } from 'element-plus'
       })
   }
 
-  const findSku = () => {
+  const findSku = async(row: SkuData) => {
+    let result: SkuInfoData = await reqSkuInfo(row.id as number)
+    if(result.code == 200) {
+      skuInfo.value = result.data
+    }
     drawer.value = true
   }
 </script>
@@ -143,11 +142,11 @@ import { ElMessage } from 'element-plus'
     margin: 0;
     text-align: center;
   }
-  
+
   .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;
   }
-  
+
   .el-carousel__item:nth-child(2n + 1) {
     background-color: #d3dce6;
   }
