@@ -21,7 +21,7 @@
   </el-card>
   </div>
   <div>
-    <el-card style="margin-top: 10px;" :body-style="{height:'81vh'}">
+    <el-card style="margin-top: 10px;overflow-y: auto;" :body-style="{height:'81vh'}">
         <div v-show="scene == 0">
           <el-button type="primary" icon="Plus" :disabled="!c3Id" @click="addSpu">添加SPU</el-button>
           <el-table :data="records" style="margin: 10px 0;height: 68vh;" :row-style="{height: '6.3vh'}" border>
@@ -30,7 +30,7 @@
               <el-table-column prop="description" label="SPU描述" show-overflow-tooltip></el-table-column>
               <el-table-column label="操作" width="300px">
                 <template #="{row,$index}">
-                  <el-button type="primary" icon="Plus" title="添加SKU" @click="addSku"></el-button>
+                  <el-button type="primary" icon="Plus" title="添加SKU" @click="addSku(row)"></el-button>
                   <el-button type="primary" icon="Edit" title="修改SPU" @click="updateSpu(row)"></el-button>
                   <el-button type="primary" icon="View" title="查看SKU列表"></el-button>
                   <el-button type="primary" icon="Delete" title="删除SPU"></el-button>
@@ -49,7 +49,7 @@
           />
         </div>
         <SpuForm ref="spu" v-show="scene == 1" @changeScene="changeScene"></SpuForm>
-        <SkuForm v-show="scene == 2" @changeScene="changeScene"></SkuForm>
+        <SkuForm ref="sku" v-show="scene == 2" @changeScene="changeScene"></SkuForm>
     </el-card>
   </div>
 
@@ -75,6 +75,7 @@
   let total = ref<number>(0)
   let records = ref<Records>([])
   let spu = ref<any>()
+  let sku = ref<any>()
 
   onMounted(() => {
     getC1()
@@ -144,8 +145,9 @@
     getHasSpu()
   }
 
-  const addSku = () => {
+  const addSku = (row: SpuData) => {
     scene.value = 2
+    sku.value.initSkuData(c1Id.value,c2Id.value,row)
   }
 </script>
   
