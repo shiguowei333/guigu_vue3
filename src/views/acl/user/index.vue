@@ -2,11 +2,11 @@
     <el-card>
       <el-form :inline="true" class="form">
         <el-form-item label="用户名">
-          <el-input placeholder="请输入用户名"></el-input>
+          <el-input placeholder="请输入用户名" v-model="keyWord"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">搜索</el-button>
-          <el-button type="primary">重置</el-button>
+          <el-button type="primary" @click="search">搜索</el-button>
+          <el-button type="primary" @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -113,17 +113,27 @@
     password: '',
   })
   let formRef = ref()
+  let keyWord = ref<string>('')
 
   onMounted(() => {
     getUser()
   })
 
   const getUser = async() => {
-    let result = await reqUserInfo(pageNo.value,pageSize.value)
+    let result = await reqUserInfo(pageNo.value,pageSize.value,keyWord.value)
     if(result.code == 200) {
       total.value = result.data.total
       userArr.value = result.data.records
     }
+  }
+
+  const search = () => {
+    getUser()
+  }
+
+  const reset = () => {
+    keyWord.value = ''
+    getUser()
   }
 
   const addUser = () => {
