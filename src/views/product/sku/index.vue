@@ -17,10 +17,10 @@
                 <el-button type="primary" icon="Edit" @click="updateSku"></el-button>
                 <el-button type="primary" icon="InfoFilled" @click="findSku(row)"></el-button>
                 <el-popconfirm :title="`确定要删除${row.skuName}吗`" @confirm="deleteSku(row)">
-                    <template #reference>
-                      <el-button type="primary" icon="Delete"></el-button>
-                    </template>
-                  </el-popconfirm>
+                  <template #reference>
+                    <el-button type="primary" icon="Delete"></el-button>
+                  </template>
+                </el-popconfirm>
               </template>
             </el-table-column>
         </el-table>
