@@ -11,7 +11,7 @@
       </el-form>
     </el-card>
     <el-card style="margin: 10px 0;">
-      <el-button type="primary">添加用户</el-button>
+      <el-button type="primary" @click="addUser">添加用户</el-button>
       <el-button type="primary">批量删除</el-button>
       <el-table :data="userArr" style="margin: 20px 0;" border>
         <el-table-column type="selection"></el-table-column>
@@ -25,7 +25,7 @@
         <el-table-column align="center" label="操作" width="260px">
           <template #="{row,$index}">
             <el-button type="primary" icon="User"></el-button>
-            <el-button type="primary" icon="Edit"></el-button>
+            <el-button type="primary" icon="Edit" @click="updateUser(row)"></el-button>
             <el-button type="primary" icon="Delete"></el-button>
           </template>
         </el-table-column>
@@ -39,18 +39,42 @@
          @change="getUser"
         ></el-pagination>
     </el-card>
+    <el-drawer
+        v-model="drawer"
+        title="添加用户"
+      >
+        <template #default>
+          <el-form>
+            <el-form-item label="用户姓名" >
+              <el-input placeholder="请您输入用户姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="用户昵称" >
+              <el-input placeholder="请您输入用户昵称"></el-input>
+            </el-form-item>
+            <el-form-item label="用户密码">
+              <el-input placeholder="请您输入用户密码"></el-input>
+            </el-form-item>
+          </el-form>
+        </template>
+        <template #footer>
+          <div style="flex: auto">
+            <el-button type="primary">取消</el-button>
+            <el-button type="primary">确定</el-button>
+          </div>
+        </template>
+      </el-drawer>
 </template>
   
 <script setup lang='ts'>
   import { reqUserInfo } from '@/api/acl/user';
   import { ref, onMounted } from 'vue'
-  import { Records } from '@/api/acl/user/type'
+  import { Records, User } from '@/api/acl/user/type'
 
   let pageNo = ref<number>(1)
   let pageSize = ref<number>(10)
   let total = ref<number>(0)
   let userArr = ref<Records>([])
-
+  let drawer = ref<boolean>(false)
   onMounted(() => {
     getUser()
   })
@@ -61,6 +85,14 @@
       total.value = result.data.total
       userArr.value = result.data.records
     }
+  }
+
+  const addUser = () => {
+    drawer.value = true
+  }
+
+  const updateUser = (row: User) => {
+    drawer.value = true
   }
 </script>
   

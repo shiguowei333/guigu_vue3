@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column prop="weight" label="重量" align="center"></el-table-column>
             <el-table-column prop="price" label="价格" align="center"></el-table-column>
-            <el-table-column label="操作" align="center" fixed="right">
+            <el-table-column label="操作" align="center" fixed="right" width="300px">
               <template #="{row,$index}">
                 <el-button type="primary" :icon="row.isSale==1?'Bottom':'Top'" @click="updateSale(row)"></el-button>
                 <el-button type="primary" icon="Edit" @click="updateSku"></el-button>
@@ -37,9 +37,6 @@
         v-model="drawer"
         title="查看商品详情"
       >
-        <template #header>
-          <h4>set title by slot</h4>
-        </template>
         <template #default>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">名称</el-col>
