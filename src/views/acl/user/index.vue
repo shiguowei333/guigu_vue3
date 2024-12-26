@@ -22,11 +22,11 @@
         <el-table-column align="center" prop="roleName" label="用户角色" show-overflow-tooltip></el-table-column>
         <el-table-column align="center" prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
         <el-table-column align="center" prop="updateTime" label="更新时间" show-overflow-tooltip></el-table-column>
-        <el-table-column align="center" label="操作" width="260px">
+        <el-table-column align="center" label="操作" width="350px">
           <template #="{row,$index}">
-            <el-button type="primary" icon="User"></el-button>
-            <el-button type="primary" icon="Edit" @click="updateUser(row)"></el-button>
-            <el-button type="primary" icon="Delete"></el-button>
+            <el-button type="primary" icon="User" @click="setRole(row)">分配角色</el-button>
+            <el-button type="primary" icon="Edit" @click="updateUser(row)">编辑</el-button>
+            <el-button type="primary" icon="Delete">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -36,45 +36,80 @@
          :page-sizes="[10,20,50,100]"
          :background="true" layout="->, total, sizes, prev, pager, next, jumper"
          :total="total"
-         @change="getUser"
-        ></el-pagination>
-    </el-card>
-    <el-drawer
-        v-model="drawer"
-        title="添加用户"
+         @change="getUser"></el-pagination>
+      <el-drawer
+      v-model="drawer"
+      :title="userParams.id?'更新用户':'添加用户'"
       >
         <template #default>
-          <el-form>
-            <el-form-item label="用户姓名" >
-              <el-input placeholder="请您输入用户姓名"></el-input>
+          <el-form :model="userParams" :rules="rules" ref="formRef">
+            <el-form-item label="用户姓名" prop="username">
+              <el-input placeholder="请您输入用户姓名" v-model="userParams.username"></el-input>
             </el-form-item>
-            <el-form-item label="用户昵称" >
-              <el-input placeholder="请您输入用户昵称"></el-input>
+            <el-form-item label="用户昵称" prop="name">
+              <el-input placeholder="请您输入用户昵称" v-model="userParams.name"></el-input>
             </el-form-item>
-            <el-form-item label="用户密码">
-              <el-input placeholder="请您输入用户密码"></el-input>
+            <el-form-item label="用户密码" prop="password" v-if="!userParams.id">
+              <el-input placeholder="请您输入用户密码" v-model="userParams.password"></el-input>
             </el-form-item>
           </el-form>
         </template>
         <template #footer>
           <div style="flex: auto">
-            <el-button type="primary">取消</el-button>
-            <el-button type="primary">确定</el-button>
+            <el-button type="primary" @click="drawer=false">取消</el-button>
+            <el-button type="primary" @click="save">确定</el-button>
           </div>
         </template>
       </el-drawer>
+      <el-drawer
+      v-model="drawer1"
+      title="分配用户角色"
+      >
+        <template #default>
+          <el-form :model="userParams" :rules="rules" ref="formRef">
+            <el-form-item label="用户姓名">
+              <el-input disabled v-model="userParams.username"></el-input>
+            </el-form-item>
+            <el-form-item label="角色列表" prop="name">
+              <el-checkbox label="" v-model="checkedAll" @change="handleCheckAllChange" :indeterminate="isIndeterminate">
+                全选
+              </el-checkbox>
+              <el-checkbox-group @change="handleCheckedCitiesChange" v-model="userRole">
+                  <el-checkbox :label="item" v-for="(item,index) in allRole" :key="item">{{ item }}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-form>
+        </template>
+        <template #footer>
+          <div style="flex: auto">
+            <el-button type="primary" @click="drawer=false">取消</el-button>
+            <el-button type="primary" @click="save">确定</el-button>
+          </div>
+        </template>
+      </el-drawer>
+    </el-card>
+
 </template>
   
 <script setup lang='ts'>
-  import { reqUserInfo } from '@/api/acl/user';
-  import { ref, onMounted } from 'vue'
+  import { reqUserInfo, reqAddOrUpdateUser } from '@/api/acl/user';
+  import { ref, onMounted, reactive } from 'vue'
   import { Records, User } from '@/api/acl/user/type'
+  import { ElMessage } from 'element-plus';
 
   let pageNo = ref<number>(1)
   let pageSize = ref<number>(10)
   let total = ref<number>(0)
   let userArr = ref<Records>([])
   let drawer = ref<boolean>(false)
+  let drawer1 = ref<boolean>(false)
+  let userParams = ref<User>({
+    username: '',
+    name: '',
+    password: '',
+  })
+  let formRef = ref()
+
   onMounted(() => {
     getUser()
   })
@@ -88,11 +123,90 @@
   }
 
   const addUser = () => {
+    formRef.value?.clearValidate()
+    userParams.value = {
+      id: 0,
+      username: '',
+      name: '',
+      password: ''
+    }
     drawer.value = true
   }
 
   const updateUser = (row: User) => {
+    formRef.value?.clearValidate()
+    Object.assign(userParams.value,row)
     drawer.value = true
+  }
+
+  const save = async() => {
+    await formRef.value.validate()
+    let result: any = await reqAddOrUpdateUser(userParams.value)
+    if(result.code == 200) {
+      drawer.value = false
+      ElMessage({
+        type: 'success',
+        message: userParams.value.id?'更新成功':'添加成功'
+      })
+      getUser()
+    }else {
+      drawer.value = false
+      ElMessage({
+        type: 'error',
+        message: userParams.value.id?'更新失败':'添加失败'
+      })
+    }
+  }
+
+  const validatorUsername = (rule:any,value:any,callBack:any) => {
+    if(value.trim().length >= 5) {
+      callBack()
+    }else {
+      callBack(new Error('用户名至少5位'))
+    }
+  }
+
+  const validatorName = (rule:any,value:any,callBack:any) => {
+    if(value.trim().length >= 5) {
+      callBack()
+    }else {
+      callBack(new Error('用户昵称至少5位'))
+    }
+  }
+
+  const validatorPassword = (rule:any,value:any,callBack:any) => {
+    if(value.trim().length >= 6) {
+      callBack()
+    }else {
+      callBack(new Error('用户密码至少6位'))
+    }
+  }
+
+  const rules = {
+    username: [{required: true,trigger: 'blur',validator:validatorUsername}],
+    name: [{required: true,trigger: 'blur',validator:validatorName}],
+    password: [{required: true,trigger: 'blur',validator:validatorPassword}]
+  }
+
+  const setRole = (row: User) => {
+    drawer1.value = true
+    Object.assign(userParams.value,row)
+  }
+
+
+  let checkedAll = ref(false)
+  let allRole =  ref(['xiaoshou','qiantai','caiwu','boss'])
+  const isIndeterminate = ref<boolean>(true)
+  let userRole = ref<string[]>([])
+  const handleCheckAllChange = (val: boolean) => {
+    userRole.value = val?allRole.value:[]
+    isIndeterminate.value = false
+  }
+
+  const handleCheckedCitiesChange = (value: string) => {
+    const checkedCount = value.length
+    checkedAll.value = checkedCount === allRole.value.length
+    isIndeterminate.value = checkedCount > 0 && checkedCount < allRole.value.length
   }
 </script>
   
