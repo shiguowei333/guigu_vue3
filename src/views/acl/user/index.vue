@@ -107,6 +107,7 @@
   let userArr = ref<Records>([])
   let drawer = ref<boolean>(false)
   let drawer1 = ref<boolean>(false)
+  let a = 1
   const userParams = reactive<User>({
     username: '',
     name: '',
