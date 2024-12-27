@@ -25,7 +25,7 @@
         <el-table-column align="center" label="操作" width="350px">
           <template #="{row,$index}">
             <el-button type="primary" icon="User" @click="setRole(row)">分配角色</el-button>
-            <el-button type="primary" icon="Edit" @click="updateUser(row.id)">编辑</el-button>
+            <el-button type="primary" icon="Edit" @click="updateUser(row)">编辑</el-button>
             <el-popconfirm :title="`确定要删除${row.name}吗`" @confirm="deleteUser(row.id)">
               <template #reference>
                 <el-button type="primary" icon="Delete">删除</el-button>
@@ -138,36 +138,34 @@
 
   const addUser = () => {
     formRef.value?.clearValidate()
-    userParams.value = {
-      id: 0,
-      username: '',
-      name: '',
-      password: ''
-    }
+    userParams.id = 0
+    userParams.username = ''
+    userParams.name = ''
+    userParams.password = ''
     drawer.value = true
   }
 
   const updateUser = (row: User) => {
     formRef.value?.clearValidate()
-    Object.assign(userParams.value,row)
+    Object.assign(userParams,row)
     drawer.value = true
   }
 
   const save = async() => {
     await formRef.value.validate()
-    let result: any = await reqAddOrUpdateUser(userParams.value)
+    let result: any = await reqAddOrUpdateUser(userParams)
     if(result.code == 200) {
       drawer.value = false
       ElMessage({
         type: 'success',
-        message: userParams.value.id?'更新成功':'添加成功'
+        message: userParams.id?'更新成功':'添加成功'
       })
       getUser()
     }else {
       drawer.value = false
       ElMessage({
         type: 'error',
-        message: userParams.value.id?'更新失败':'添加失败'
+        message: userParams.id?'更新失败':'添加失败'
       })
     }
   }
@@ -204,7 +202,7 @@
 
   const setRole = async(row: User) => {
     drawer1.value = true
-    Object.assign(userParams.value,row)
+    Object.assign(userParams,row)
     let result: AllRoleResponseData = await reqAllRole(row.id as number)
     allRole.value = result.data.allRolesList
     userRole.value = result.data.assignRoles
@@ -229,7 +227,7 @@
 
   const confirmClick = async() => {
     let data: SetRoleData = {
-      userId: userParams.value.id as number,
+      userId: userParams.id as number,
       roleIdList: userRole.value.map(item => {
         return item.id as number
       })
