@@ -39,22 +39,23 @@
          @change="getRole"></el-pagination>
     </el-card>
     <el-dialog v-model="dialogVisite" :title="RoleParms.id?'修改职位':'添加职位'">
-      <el-form>
-        <el-form-item label="职位名称">
-          <el-input placeholder="请输入职位名称"></el-input>
+      <el-form ref="formRef" :model="RoleParms" :rules="rules">
+        <el-form-item label="职位名称" prop="roleName">
+          <el-input placeholder="请输入职位名称" v-model="RoleParms.roleName"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
           <el-button type="primary" @click="dialogVisite=false">取消</el-button>
-          <el-button type="primary" @click="">确定</el-button>
+          <el-button type="primary" @click="save">确定</el-button>
         </template>
     </el-dialog>
 </template>
   
 <script setup lang='ts'>
   import { onMounted, ref, reactive } from 'vue'
-  import { reqAllRoleList } from '@/api/acl/role'
+  import { reqAllRoleList, reqAddOrUpdateRole } from '@/api/acl/role'
   import type { RoleResponseData, Records, RoleData } from '@/api/acl/role/type'
+  import { ElMessage } from 'element-plus'
 
   let pageNo = ref<number>(1)
   let pageSize = ref<number>(10)
@@ -62,7 +63,10 @@
   let keyWord = ref<string>('')
   let allRole = ref<Records>([])
   let dialogVisite = ref<boolean>(false)
-  let RoleParms = reactive({})
+  let RoleParms: RoleData = reactive({
+    roleName: ''
+  })
+  let formRef = ref()
 
   onMounted(() => {
     getRole()
@@ -86,11 +90,48 @@
   }
 
   const addRole = () => {
+    Object.assign(RoleParms,{
+      roleName: '',
+      id: 0
+    })
+    formRef.value?.clearValidate('roleName')
     dialogVisite.value = true
   }
 
   const updateRole = (row: RoleData) => {
     dialogVisite.value = true
+    Object.assign(RoleParms,row)
+    formRef.value?.clearValidate('roleName')
+  }
+
+  const validatorRoleName = (rule: any, value: any, callBack: any) => {
+    if(value.trim().length >= 3) {
+      callBack()
+    }else {
+      callBack(new Error('职位名称至少3位'))
+    }
+  }
+
+  const rules = {
+    roleName: [{required:true,trigger:'blur',validator:validatorRoleName}]
+  }
+
+  const save = async() => {
+    await formRef.value.validate()
+    let result: any = await reqAddOrUpdateRole(RoleParms)
+    if(result.code == 200) {
+      dialogVisite.value = false
+      ElMessage({
+        type: 'success',
+        message: RoleParms.id?'更新成功':'添加成功'
+      })
+      getRole()
+    }else {
+      ElMessage({
+        type: 'error',
+        message: RoleParms.id?'更新失败':'添加失败'
+      })
+    }
   }
 </script>
   

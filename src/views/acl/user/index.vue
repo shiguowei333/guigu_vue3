@@ -99,7 +99,7 @@
   import { reqUserInfo, reqAddOrUpdateUser, reqAllRole, reqSetUserRole, reqRemoveUser, reqSelectUser } from '@/api/acl/user';
   import { ref, onMounted, reactive } from 'vue'
   import type { Records, User, AllRoleResponseData, AllRole, SetRoleData } from '@/api/acl/user/type'
-  import { ElMessage } from 'element-plus';
+  import { ElMessage } from 'element-plus'
 
   let pageNo = ref<number>(1)
   let pageSize = ref<number>(10)
