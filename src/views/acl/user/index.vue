@@ -97,7 +97,7 @@
   
 <script setup lang='ts'>
   import { reqUserInfo, reqAddOrUpdateUser, reqAllRole, reqSetUserRole, reqRemoveUser, reqSelectUser } from '@/api/acl/user';
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, reactive } from 'vue'
   import type { Records, User, AllRoleResponseData, AllRole, SetRoleData } from '@/api/acl/user/type'
   import { ElMessage } from 'element-plus';
 
@@ -107,10 +107,10 @@
   let userArr = ref<Records>([])
   let drawer = ref<boolean>(false)
   let drawer1 = ref<boolean>(false)
-  let userParams = ref<User>({
+  const userParams = reactive<User>({
     username: '',
     name: '',
-    password: '',
+    password: ''
   })
   let formRef = ref()
   let keyWord = ref<string>('')

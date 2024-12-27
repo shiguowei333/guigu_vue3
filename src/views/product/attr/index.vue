@@ -73,7 +73,7 @@
   import { reqC1, reqC2, reqC3, reqAttr, reqAddOrUpdateAttr, reqRemoveAttr} from '@/api/product/attr'
   import { ref, onMounted, reactive, nextTick } from 'vue'
   import type { CategoryResponseData, CategoryObj, AttrResponseData, Attr, AttrValue} from "@/api/product/attr/type"
-import { ElMessage } from 'element-plus';
+  import { ElMessage } from 'element-plus';
 
   let c1Arr = ref<CategoryObj[]>([])
   let c1Id = ref<number|string>('')
