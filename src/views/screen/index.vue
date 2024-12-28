@@ -67,10 +67,10 @@
           flex-direction: column;
           .tourist {
             flex: 1.2;
-          }
+          };
           .sex {
             flex: 1;
-          }
+          };
           .age {
             flex: 1;
           }
