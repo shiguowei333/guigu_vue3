@@ -22,7 +22,7 @@
           <template #="{row,$index}">
             <el-button type="primary" icon="User" @click="setPermisstion(row)">分配权限</el-button>
             <el-button type="primary" icon="Edit" @click="updateRole(row)">编辑</el-button>
-            <el-popconfirm :title="`确定要删除${row.name}吗`" @confirm="">
+            <el-popconfirm :title="`确定要删除${row.roleName}吗`" @confirm="removeRole(row.id)">
               <template #reference>
                 <el-button type="primary" icon="Delete">删除</el-button>
               </template>
@@ -74,7 +74,7 @@
   
 <script setup lang='ts'>
   import { onMounted, ref, reactive } from 'vue'
-  import { reqAllRoleList, reqAddOrUpdateRole, reqAllMenuList, reqSetPermisson } from '@/api/acl/role'
+  import { reqAllRoleList, reqAddOrUpdateRole, reqAllMenuList, reqSetPermisson, reqRemoveRole } from '@/api/acl/role'
   import type { RoleResponseData, Records, RoleData, MenuResponseData, MenuList } from '@/api/acl/role/type'
   import { ElMessage } from 'element-plus'
 
@@ -197,6 +197,17 @@
       ElMessage({
         type: 'success',
         message: '分配权限成功'
+      })
+      getRole()
+    }
+  }
+
+  const removeRole = async(roleId: number) => {
+    let result = await reqRemoveRole(roleId)
+    if(result.code == 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
       })
       getRole()
     }
