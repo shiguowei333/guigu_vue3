@@ -16,7 +16,19 @@
       <div class="tabbar_right">
         <el-button type="primary" size="small" icon="Refresh" @click="updateRefsh" circle></el-button>
         <el-button type="primary" size="small" icon="FullScreen" @click="fullScreen" circle></el-button>
-        <el-button type="primary" size="small" icon="Setting" circle></el-button>
+        <el-popover ref="popover" placement="bottom" title="主题设置" width="300" trigger="hover">
+          <el-form>
+              <el-form-item label="主题颜色">
+                <el-color-picker v-model="color" show-alpha></el-color-picker>
+              </el-form-item>
+              <el-form-item label="暗黑模式">
+                <el-switch @change="changeDark" v-model="dark" active-icon="MoonNight" inactive-icon="Sunny"></el-switch>
+              </el-form-item>
+          </el-form>
+          <template #reference>
+            <el-button type="primary" size="small" icon="Setting" circle></el-button>
+          </template>
+        </el-popover>
         <img :src="userStore.avatar" style="width: 24px;height: 24px;margin: 0px 20px;border-radius: 50%;">
         <el-dropdown>
           <span class="el-dropdown-link">
@@ -39,11 +51,14 @@
   import useLayOutSsttingStore from '@/store/modules/setting'
   import{ useRoute,useRouter } from 'vue-router'
   import useUserStore from '@/store/modules/user'
+  import { ref } from 'vue'
   // 引入用户小仓库、路由、路由器
   let userStore = useUserStore()
   let layOutSettingStore = useLayOutSsttingStore()
   let $route = useRoute()
   let $router = useRouter()
+  let dark = ref(false)
+  const color = ref('rgba(255,69,0,0.68)')
   // 修改菜单折叠、展开状态的回调函数
   const changeIcon = () => {
     layOutSettingStore.fold = !layOutSettingStore.fold
@@ -65,6 +80,11 @@
   const logout = async () => {
     await userStore.userLogout()
     $router.push({path:'/login',query:{redirect: $route.path}})
+  }
+
+  const changeDark = () => {
+    let html = document.documentElement
+    dark.value?html.className = 'dark':html.className = ''
   }
 </script>
   

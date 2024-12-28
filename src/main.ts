@@ -9,6 +9,8 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import router from '@/router'
 // 引入pinia仓库
 import pinia from '@/store'
+// 引入暗黑模式的样式
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 // 获取应用实例对象
 const app = createApp(App)
