@@ -5,7 +5,11 @@
           <Top></Top>
         </div>
         <div class="bottom">
-          <div class="left"></div>
+          <div class="left">
+            <Tourist class="tourist"></Tourist>
+            <Sex class="sex"></Sex>
+            <Age class="age"></Age>
+          </div>
           <div class="center"></div>
           <div class="right"></div>
         </div>
@@ -16,6 +20,9 @@
 <script setup lang='ts'>
   import { ref, onMounted } from 'vue'
   import Top from './components/top/index.vue'
+  import Tourist from './components/tourist/index.vue'
+  import Sex from './components/sex/index.vue'
+  import Age from './components/age/index.vue'
 
   let screen = ref()
 
@@ -55,6 +62,18 @@
         display: flex;
         .left {
           flex: 1;
+          height: 1040px;
+          display: flex;
+          flex-direction: column;
+          .tourist {
+            flex: 1.2;
+          }
+          .sex {
+            flex: 1;
+          }
+          .age {
+            flex: 1;
+          }
         }
         .center {
           flex: 2;
