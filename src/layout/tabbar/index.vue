@@ -19,7 +19,7 @@
         <el-popover ref="popover" placement="bottom" title="主题设置" width="300" trigger="hover">
           <el-form>
               <el-form-item label="主题颜色">
-                <el-color-picker v-model="color" show-alpha></el-color-picker>
+                <el-color-picker @change="setColor" v-model="color" show-alpha :teleported="false"></el-color-picker>
               </el-form-item>
               <el-form-item label="暗黑模式">
                 <el-switch @change="changeDark" v-model="dark" active-icon="MoonNight" inactive-icon="Sunny"></el-switch>
@@ -85,6 +85,11 @@
   const changeDark = () => {
     let html = document.documentElement
     dark.value?html.className = 'dark':html.className = ''
+  }
+
+  const setColor = () => {
+    const html = document.documentElement
+    html.style.setProperty('--el-color-primary',color.value)
   }
 </script>
   
