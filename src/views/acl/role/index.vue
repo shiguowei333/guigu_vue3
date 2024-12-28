@@ -20,7 +20,7 @@
         <el-table-column prop="updateTime" align="center" show-overflow-tooltip label="更新时间"></el-table-column>
         <el-table-column align="center" label="操作" width="400px">
           <template #="{row,$index}">
-            <el-button type="primary" icon="User" @click="">分配权限</el-button>
+            <el-button type="primary" icon="User" @click="setPermisstion(row)">分配权限</el-button>
             <el-button type="primary" icon="Edit" @click="updateRole(row)">编辑</el-button>
             <el-popconfirm :title="`确定要删除${row.name}吗`" @confirm="">
               <template #reference>
@@ -49,12 +49,33 @@
           <el-button type="primary" @click="save">确定</el-button>
         </template>
     </el-dialog>
+    <el-drawer v-model="drawer">
+        <template #header>
+          <h4>分配菜单与按钮的权限</h4>
+        </template>
+        <template #default>
+          <el-tree
+            ref="treeRef"
+            style="max-width: 600px"
+            :data="menuArr"
+            show-checkbox
+            node-key="id"
+            default-expand-all
+            :default-checked-keys="selectArr"
+            :props="defaultProps"
+          />
+        </template>
+        <template #footer>
+          <el-button type="primary" @click="drawer=false">取消</el-button>
+          <el-button type="primary" @click="handler()">确定</el-button>
+        </template>
+    </el-drawer>
 </template>
   
 <script setup lang='ts'>
   import { onMounted, ref, reactive } from 'vue'
-  import { reqAllRoleList, reqAddOrUpdateRole } from '@/api/acl/role'
-  import type { RoleResponseData, Records, RoleData } from '@/api/acl/role/type'
+  import { reqAllRoleList, reqAddOrUpdateRole, reqAllMenuList, reqSetPermisson } from '@/api/acl/role'
+  import type { RoleResponseData, Records, RoleData, MenuResponseData, MenuList } from '@/api/acl/role/type'
   import { ElMessage } from 'element-plus'
 
   let pageNo = ref<number>(1)
@@ -67,6 +88,10 @@
     roleName: ''
   })
   let formRef = ref()
+  let drawer =ref<boolean>(false)
+  let menuArr = ref<MenuList>([])
+  let selectArr = ref<number[]>([])
+  let treeRef = ref()
 
   onMounted(() => {
     getRole()
@@ -131,6 +156,49 @@
         type: 'error',
         message: RoleParms.id?'更新失败':'添加失败'
       })
+    }
+  }
+
+  const setPermisstion = async(row: RoleData) => {
+    drawer.value = true
+    Object.assign(RoleParms,row)
+    let result: MenuResponseData = await reqAllMenuList(row.id as number)
+    if(result.code == 200) {
+      menuArr.value = result.data
+      selectArr.value = filterSelectArr(menuArr.value, [])
+    }
+  }
+
+  const defaultProps = {
+    children: 'children',
+    label: 'name',
+  }
+
+  const filterSelectArr = (ALLData: any, initArr: any) => {
+    ALLData.forEach((item: any) => {
+      if(item.select && item.level == 4) {
+        initArr.push(item.id)
+      }
+      if(item.children && item.children.length > 0) {
+        filterSelectArr(item.children,initArr)
+      }
+    });
+    return initArr
+  }
+
+  const handler = async() => {
+    let roleId = RoleParms.id
+    let allArr = treeRef.value.getCheckedKeys()
+    let halfArr = treeRef.value.getHalfCheckedKeys()
+    let permissionId = allArr.concat(halfArr)
+    let result = await reqSetPermisson(roleId as number,permissionId)
+    if(result.code == 200) {
+      drawer.value = false
+      ElMessage({
+        type: 'success',
+        message: '分配权限成功'
+      })
+      getRole()
     }
   }
 </script>
