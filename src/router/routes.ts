@@ -48,6 +48,19 @@ export const constantRoute = [
     }
   },
   {
+    // 404页面路由
+    path: '/404',
+    component: () => import('@/views/404/index.vue'),
+    name: '404',
+    meta: {
+      title: '404',
+      hidden: true
+    }
+  }
+]
+
+export const asyncRoute = [
+  {
     // 权限管理菜单路由
     path: '/acl',
     component: () => import('@/layout/index.vue'),
@@ -151,25 +164,16 @@ export const constantRoute = [
         }
       }
     ]
-  },
-  {
-    // 404页面路由
-    path: '/404',
-    component: () => import('@/views/404/index.vue'),
-    name: '404',
-    meta: {
-      title: '404',
-      hidden: true
-    }
-  },
-  {
-    // 任意路由，跳转404
-    path: '/:pathMatch(.*)*',
-    redirect:'/404',
-    name: 'Any',
-    meta: {
-      title: '任意路由',
-      hidden: true
-    }
   }
 ]
+
+export const anyRoute = {
+  // 任意路由，跳转404
+  path: '/:pathMatch(.*)*',
+  redirect:'/404',
+  name: 'Any',
+  meta: {
+    title: '任意路由',
+    hidden: true
+  }
+}

@@ -6,7 +6,22 @@ import type { loginFormData, loginResponseData, userInfoReponseData } from "@/ap
 import { reqLogin, reqUserInfo, reqLogout } from '@/api/user'
 import { GET_TOKEN, SET_TOEKN, REMOVE_TOKEN } from '@/utils/token'
 // 引入常量路由
-import { constantRoute } from '@/router/routes'
+import { constantRoute, asyncRoute, anyRoute } from '@/router/routes'
+import router from '@/router'
+//@ts-ignore
+import cloneDeep from 'lodash/cloneDeep'
+
+function filterAsyncRoute(asyncRoute: any, routes: any) {
+  return asyncRoute.filter((item: any) => {
+    if(routes.includes(item.name)) {
+      if(item.children && item.children.length > 0) {
+        item.children = filterAsyncRoute(item.children,routes)
+      }
+      return true
+    }
+  })
+}
+
 // 创建用户小仓库
 let useUserStore = defineStore('User', {
   state: () => {
@@ -14,7 +29,8 @@ let useUserStore = defineStore('User', {
       token: GET_TOKEN(),// 用户登录之后记录在本地的TOKEN
       menuRoutes: constantRoute,// 常量路由信息，用于动态加载左侧菜单
       username: '',// 用户的个人信息-用户名
-      avatar: ''// 用户的个人信息-头像
+      avatar: '',// 用户的个人信息-头像
+      buttons: [''],
     }
   },
   actions: {
@@ -35,6 +51,13 @@ let useUserStore = defineStore('User', {
       if(result.code === 200) {
         this.username = result.data.name
         this.avatar = result.data.avatar
+        this.buttons = []
+        this.buttons = result.data.buttons
+        let userAsyncRoute = filterAsyncRoute(cloneDeep(asyncRoute),result.data.routes)
+        this.menuRoutes = [...constantRoute,...userAsyncRoute,anyRoute];
+        [...userAsyncRoute,anyRoute].forEach((route: any) => {
+          router.addRoute(route)
+        })
         return 'ok'
       }else {
         return Promise.reject(result.message)
