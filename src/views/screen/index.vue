@@ -14,7 +14,11 @@
             <Map class="map"></Map>
             <Line class="line"></Line>
           </div>
-          <div class="right"></div>
+          <div class="right">
+            <Rank class="rank"></Rank>
+            <Year class="year"></Year>
+            <Counter class="counter"></Counter>
+          </div>
         </div>
       </div>
     </div>
@@ -28,6 +32,9 @@
   import Age from './components/age/index.vue'
   import Map from './components/map/index.vue'
   import Line from './components/line/index.vue'
+  import Rank from './components/rank/index.vue'
+  import Year from './components/year/index.vue'
+  import Counter from './components/counter/index.vue'
 
   let screen = ref()
 
@@ -93,6 +100,17 @@
         }
         .right {
           flex: 1;
+          display: flex;
+          flex-direction: column;
+          .rank {
+            flex: 1.2;
+          }
+          .year {
+            flex: 1;
+          }
+          .counter {
+            flex: 1;
+          }
         }
       }
     }

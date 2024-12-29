@@ -77,7 +77,7 @@
     background-size: 100% 100%;
     margin: 20px 0;
     .title {
-      margin-left: 20px;
+      margin: 10px 0 0 10px;
       p {
         color: white;
         font-size: 20px;
