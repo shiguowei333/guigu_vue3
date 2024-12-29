@@ -150,16 +150,13 @@ onMounted(() => {
   background: url(../../images/dataScreen-main-cb.png) no-repeat;
   background-size: 100% 100%;
   margin: 20px 0;
-
   .title {
-    margin: 20px 10px;
-
+    margin: 10px 0 0 10px;
     p {
       color: white;
       font-size: 20px;
     }
   }
-
   .charts {
     height: calc(100% - 30px);
   }

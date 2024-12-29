@@ -99,14 +99,15 @@
           }
         }
         .right {
-          flex: 1;
+          margin-left: 20px;
+          flex: 0.9;
           display: flex;
           flex-direction: column;
           .rank {
-            flex: 1.2;
+            flex: 1;
           }
           .year {
-            flex: 1;
+            flex: 0.8;
           }
           .counter {
             flex: 1;
