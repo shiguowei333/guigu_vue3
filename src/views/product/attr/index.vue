@@ -3,17 +3,17 @@
       <el-form :inline="true">
         <el-form-item label="一级分类">
           <el-select style="width: 200px" v-model="c1Id" @change="handle1" :disabled="scene">
-            <el-option v-for="(c1,index) in c1Arr" :label="c1.name" :key="c1.id" :value="c1.id"></el-option>
+            <el-option v-for="(c1) in c1Arr" :label="c1.name" :key="c1.id" :value="c1.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="二级分类">
           <el-select style="width: 200px" v-model="c2Id" @change="handle2" :disabled="scene">
-            <el-option v-for="(c2,index) in c2Arr" :label="c2.name" :key="c2.id" :value="c2.id"></el-option>
+            <el-option v-for="(c2) in c2Arr" :label="c2.name" :key="c2.id" :value="c2.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="三级分类">
           <el-select style="width: 200px" v-model="c3Id" @change="handle3" :disabled="scene">
-            <el-option v-for="(c3,index) in c3Arr" :label="c3.name" :key="c3.id" :value="c3.id"></el-option>
+            <el-option v-for="(c3) in c3Arr" :label="c3.name" :key="c3.id" :value="c3.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -25,12 +25,12 @@
           <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
           <el-table-column label="属性名称" align="center" width="120px" prop="attrName"></el-table-column>
           <el-table-column label="属性值名称" align="center">
-            <template #="{row,$index}">
-              <el-tag style="margin: 10px 5px;" v-for="(item,index) in row.attrValueList" :key="item.id">{{ item.valueName }}</el-tag>
+            <template #="{row}">
+              <el-tag style="margin: 10px 5px;" v-for="(item) in row.attrValueList" :key="item.id">{{ item.valueName }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="150px">
-            <template #="{row,$index}">
+            <template #="{row}">
               <el-button type="primary" icon="Edit" @click="updateAttr(row)"></el-button>
               <el-popconfirm :title="`确定要删除${row.attrName}`"  @confirm="deleteAttr(row.id)">
                 <template #reference>
@@ -58,7 +58,7 @@
               </template>
             </el-table-column>
             <el-table-column label="操作" width="150px" align="center">
-              <template #="{row,$index}">
+              <template #="{$index}">
                 <el-button type="primary" icon="Delete" @click="attrParams.attrValueList.splice($index,1)"></el-button>
               </template>
             </el-table-column>

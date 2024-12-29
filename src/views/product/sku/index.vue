@@ -5,14 +5,14 @@
             <el-table-column prop="skuName" show-overflow-tooltip label="名称" align="center"></el-table-column>
             <el-table-column prop="skuDesc" show-overflow-tooltip label="描述" align="center"></el-table-column>
             <el-table-column label="默认图片" align="center">
-              <template #="{row,$index}">
+              <template #="{row}">
                 <img :src="row.skuDefaultImg" alt="" style="width: 70px;height: 70px;">
               </template>
             </el-table-column>
             <el-table-column prop="weight" label="重量" align="center"></el-table-column>
             <el-table-column prop="price" label="价格" align="center"></el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="300px">
-              <template #="{row,$index}">
+              <template #="{row}">
                 <el-button type="primary" :icon="row.isSale==1?'Bottom':'Top'" @click="updateSale(row)"></el-button>
                 <el-button type="primary" icon="Edit" @click="updateSku"></el-button>
                 <el-button type="primary" icon="InfoFilled" @click="findSku(row)"></el-button>
@@ -53,13 +53,13 @@
           <el-row style="margin: 10px 0;">
               <el-col :span="6">平台属性</el-col>
               <el-col :span="18">
-                <el-tag style="margin: 5px;" v-for="(item,index) in skuInfo.skuAttrValueList" :key="item.id" type="success">{{ item.valueName }}</el-tag>
+                <el-tag style="margin: 5px;" v-for="(item) in skuInfo.skuAttrValueList" :key="item.id" type="success">{{ item.valueName }}</el-tag>
               </el-col>
           </el-row>
           <el-row style="margin: 10px 0;">
               <el-col :span="6">销售属性</el-col>
               <el-col :span="18">
-                <el-tag style="margin: 5px;" v-for="(item,index) in skuInfo.skuSaleAttrValueList" :key="item.id" type="success">{{ item.saleAttrValueName }}</el-tag>
+                <el-tag style="margin: 5px;" v-for="(item) in skuInfo.skuSaleAttrValueList" :key="item.id" type="success">{{ item.saleAttrValueName }}</el-tag>
               </el-col>
           </el-row>
           <el-row style="margin: 10px 0;">

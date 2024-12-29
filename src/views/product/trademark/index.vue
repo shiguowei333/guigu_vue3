@@ -162,6 +162,7 @@
   }
 
   const validatorTmName = (rule: any, value: any, callback: any) => {
+    rule
     if(value.trim().length >= 2) {
       callback()
     }else {
@@ -170,6 +171,7 @@
   }
 
   const validatorLogoUrl = (rule: any, value: any, callback: any) => {
+    rule
     if(value) {
       callback()
     }else {

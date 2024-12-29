@@ -36,6 +36,7 @@
     let loginForm = reactive({username: 'admin',password: '111111'})
     // 自定义校验姓名函数
     const validatorUserName = (rules: any,value: any,callback: any) => {
+      rules
       if(value.length >= 5) {
         callback()
       }else {
@@ -44,6 +45,7 @@
     }
     // 自定义校验密码函数
     const validatorPassword = (rules: any,value: any,callback: any) => {
+      rules
       if(value.length >= 6) {
         callback()
       }else {

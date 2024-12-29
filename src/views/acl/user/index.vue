@@ -23,7 +23,7 @@
         <el-table-column align="center" prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
         <el-table-column align="center" prop="updateTime" label="更新时间" show-overflow-tooltip></el-table-column>
         <el-table-column align="center" label="操作" width="350px">
-          <template #="{row,$index}">
+          <template #="{row}">
             <el-button type="primary" icon="User" @click="setRole(row)">分配角色</el-button>
             <el-button type="primary" icon="Edit" @click="updateUser(row)">编辑</el-button>
             <el-popconfirm :title="`确定要删除${row.name}吗`" @confirm="deleteUser(row.id)">
@@ -171,6 +171,7 @@
   }
 
   const validatorUsername = (rule:any,value:any,callBack:any) => {
+    rule
     if(value.trim().length >= 5) {
       callBack()
     }else {
@@ -179,6 +180,7 @@
   }
 
   const validatorName = (rule:any,value:any,callBack:any) => {
+    rule
     if(value.trim().length >= 5) {
       callBack()
     }else {
@@ -187,6 +189,7 @@
   }
 
   const validatorPassword = (rule:any,value:any,callBack:any) => {
+    rule
     if(value.trim().length >= 6) {
       callBack()
     }else {

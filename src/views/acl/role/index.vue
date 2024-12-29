@@ -19,7 +19,7 @@
         <el-table-column prop="createTime" align="center" show-overflow-tooltip label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" align="center" show-overflow-tooltip label="更新时间"></el-table-column>
         <el-table-column align="center" label="操作" width="400px">
-          <template #="{row,$index}">
+          <template #="{row}">
             <el-button type="primary" icon="User" @click="setPermisstion(row)">分配权限</el-button>
             <el-button type="primary" icon="Edit" @click="updateRole(row)">编辑</el-button>
             <el-popconfirm :title="`确定要删除${row.roleName}吗`" @confirm="removeRole(row.id)">
@@ -130,6 +130,7 @@
   }
 
   const validatorRoleName = (rule: any, value: any, callBack: any) => {
+    rule
     if(value.trim().length >= 3) {
       callBack()
     }else {

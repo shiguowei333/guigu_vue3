@@ -4,7 +4,7 @@
     <el-table-column prop="code" label="权限"></el-table-column>
     <el-table-column prop="updateTime" label="修改时间"></el-table-column>
     <el-table-column label="操作">
-      <template #="{ row, $index }">
+      <template #="{ row }">
         <el-button type="primary" icon="Plus" @click="addPermission(row)" :disabled="row.level == 4 ? true : false">{{
           row.level == 3 ? '添加功能' :'添加菜单' }}</el-button>
         <el-button type="primary" icon="Edit" @click="updatePermission(row)"

@@ -4,17 +4,17 @@
     <el-form :inline="true">
       <el-form-item label="一级分类">
         <el-select style="width: 200px" v-model="c1Id" @change="handle1" :disabled="scene">
-          <el-option v-for="(c1,index) in c1Arr" :label="c1.name" :key="c1.id" :value="c1.id"></el-option>
+          <el-option v-for="(c1) in c1Arr" :label="c1.name" :key="c1.id" :value="c1.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="二级分类">
         <el-select style="width: 200px" v-model="c2Id" @change="handle2" :disabled="scene">
-          <el-option v-for="(c2,index) in c2Arr" :label="c2.name" :key="c2.id" :value="c2.id"></el-option>
+          <el-option v-for="(c2) in c2Arr" :label="c2.name" :key="c2.id" :value="c2.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
         <el-select style="width: 200px" v-model="c3Id" @change="handle3" :disabled="scene">
-          <el-option v-for="(c3,index) in c3Arr" :label="c3.name" :key="c3.id" :value="c3.id"></el-option>
+          <el-option v-for="(c3) in c3Arr" :label="c3.name" :key="c3.id" :value="c3.id"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -29,7 +29,7 @@
               <el-table-column prop="spuName" label="SPU名称"></el-table-column>
               <el-table-column prop="description" label="SPU描述" show-overflow-tooltip></el-table-column>
               <el-table-column label="操作" width="300px">
-                <template #="{row,$index}">
+                <template #="{row}">
                   <el-button type="primary" icon="Plus" title="添加SKU" @click="addSku(row)"></el-button>
                   <el-button type="primary" icon="Edit" title="修改SPU" @click="updateSpu(row)"></el-button>
                   <el-button type="primary" icon="View" title="查看SKU列表" @click="findSku(row)"></el-button>
@@ -60,7 +60,7 @@
                 <el-table-column prop="price" label="SKU价格"></el-table-column>
                 <el-table-column prop="weight" label="SKU重量"></el-table-column>
                 <el-table-column label="SKU图片">
-                  <template #="{row,$index}">
+                  <template #="{row}">
                     <img :src="row.skuDefaultImg" style="width: 100px;height: 100px;" alt="">
                   </template>
                 </el-table-column>
@@ -78,7 +78,7 @@
   import { reqC1, reqC2, reqC3} from '@/api/product/attr'
   import { ref, onMounted } from 'vue'
   import { reqHasSpu, reqSkuList, reqRemoveSpu } from '@/api/product/spu'
-  import { HasSpuResponseData, Records, SpuData, SkuInfoData, SkuData } from '@/api/product/spu/type'
+  import { HasSpuResponseData, Records, SpuData, SkuData } from '@/api/product/spu/type'
 import { ElMessage } from 'element-plus'
   let scene = ref<number>(0)
   let c1Arr = ref<CategoryObj[]>([])
