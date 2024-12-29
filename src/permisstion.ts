@@ -12,6 +12,7 @@ nprogress.configure({ showSpinner: false })
 let userStore = useUserStore(pinia)
 // 全局前置守卫
 router.beforeEach(async (to, from, next) => {
+  from
   // 设置不同路由的浏览器title标题不同
   document.title = `${setting.title} - ${to.meta.title}`
   // 切换路由的进度条功能
@@ -46,6 +47,8 @@ router.beforeEach(async (to, from, next) => {
 })
 // 全局后置守卫
 router.afterEach((to, from) => {
+  to
+  from
   // 路由跳转进度条结束
   nprogress.done()
 })
